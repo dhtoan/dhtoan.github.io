@@ -1,151 +1,192 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" class="no-js">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="../assets/lang.js"></script>
-<script>if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver'in window)document.documentElement.classList.add('js');</script>
-<title>Đỗ Huy Toàn — Nhà sáng tạo video độc lập</title>
-<meta name="description" content="Đỗ Huy Toàn là nhà sáng tạo nội dung độc lập ở Delaware, Mỹ, làm hoạt hình có hỗ trợ AI, ý tưởng DIY Giáng sinh và video bản đồ trên YouTube.">
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+<title>Đỗ Huy Toàn — Nhà sáng lập &amp; CEO, thương mại điện tử và truyền thông số</title>
+<meta name="description" content="Đỗ Huy Toàn là doanh nhân Mỹ ở Delaware, nhà sáng lập và CEO một công ty thương mại điện tử và truyền thông số, chủ các kênh YouTube Do Huy Toan, JD và Map a Day.">
+<meta name="theme-color" content="#f5efe6">
 <link rel="canonical" href="https://dhtoan.github.io/vi/">
 <link rel="alternate" hreflang="en" href="https://dhtoan.github.io/">
 <link rel="alternate" hreflang="vi" href="https://dhtoan.github.io/vi/">
 <link rel="alternate" hreflang="x-default" href="https://dhtoan.github.io/">
 <meta property="og:type" content="profile">
-<meta property="og:title" content="Đỗ Huy Toàn — Nhà sáng tạo video độc lập">
-<meta property="og:description" content="Studio một người đứng sau các kênh YouTube Do Huy Toan, JD và Map a Day.">
+<meta property="og:title" content="Đỗ Huy Toàn — Nhà sáng lập &amp; CEO">
+<meta property="og:description" content="Doanh nhân Mỹ ở Delaware: thương mại điện tử, truyền thông số và ba kênh YouTube.">
 <meta property="og:url" content="https://dhtoan.github.io/vi/">
 <meta property="og:image" content="https://dhtoan.github.io/assets/portrait.jpg">
 <meta property="og:locale" content="vi_VN">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;700;900&family=VT323&display=swap">
 <link rel="stylesheet" href="../assets/site.css">
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+<script src="../assets/home.js" defer></script>
+<script type="module" src="../assets/scene.js"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "ProfilePage",
   "@id": "https://dhtoan.github.io/vi/#profile",
   "url": "https://dhtoan.github.io/vi/",
-  "name": "Đỗ Huy Toàn — Nhà sáng tạo video độc lập",
+  "name": "Đỗ Huy Toàn — Nhà sáng lập & CEO",
   "inLanguage": "vi",
   "dateModified": "2026-10-20",
   "mainEntity": {"@id": "https://dhtoan.github.io/#person"}
 }
 </script>
 </head>
-<body>
+<body class="home">
 <a class="skip" href="#main">Bỏ qua tới nội dung</a>
-<header class="nav">
-  <div class="wrap">
-    <a class="brand" href="./">Đỗ Huy Toàn</a>
-    <nav aria-label="Điều hướng chính">
-      <ul>
-        <li class="hide-sm"><a href="#channels">Các kênh</a></li>
-        <li class="hide-sm"><a href="#about">Giới thiệu</a></li>
-        <li><a href="../press/" hreflang="en">Press</a></li>
-        <li><a class="lang" href="../" hreflang="en" lang="en" data-lang="en">English</a></li>
-      </ul>
-    </nav>
-  </div>
+<div class="loader" id="loader" aria-hidden="true"><span id="loader-pct">0%</span></div>
+<script>
+(function(){var h=document.documentElement,el=document.getElementById('loader-pct'),p=0,t=setInterval(function(){
+  if(h.classList.contains('scene-ready')){clearInterval(t);return;}
+  p=Math.min(90,p+Math.max(1,(90-p)*.08));el.textContent=Math.round(p)+'%';},60);
+  setTimeout(function(){if(!h.classList.contains('scene-ready')){h.classList.add('no-webgl','scene-ready');document.getElementById('loader').classList.add('done');}},7000);})();
+</script>
+
+<header class="topbar">
+  <a class="logo" href="./" aria-label="Đỗ Huy Toàn, trang chủ">dh<span>.</span></a>
+  <nav class="top-actions" aria-label="Điều hướng chính">
+    <a class="round" href="../press/" hreflang="en" aria-label="Bộ tài liệu báo chí"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z M8 9h8 M8 13h8 M8 17h5"/></svg></a>
+    <a class="round round-text" href="../" hreflang="en" lang="en" data-lang="en" aria-label="English">EN</a>
+  </nav>
 </header>
 
 <main id="main">
-  <section class="hero">
-    <div class="wrap">
-      <!-- Ảnh chân dung: thay "DT" bằng <img src="../assets/portrait.jpg" alt="Đỗ Huy Toàn" width="132" height="132"> -->
-      <div class="portrait" role="img" aria-label="Đỗ Huy Toàn">DT</div>
-      <p class="eyebrow">Nhà sáng tạo video độc lập · Delaware, Mỹ</p>
-      <h1>Một người làm. <span class="gradient-text">Kể chuyện cho cả thế giới.</span></h1>
-      <p class="sub">Studio một người làm ý tưởng DIY Giáng sinh phát sáng, loạt hoạt hình không lời về chú hổ con ở Đài Loan, và địa lý trong sáu mươi giây.</p>
-      <div class="actions">
-        <a class="btn primary" href="https://www.youtube.com/@dhtoan" rel="me">Xem trên YouTube</a>
-        <a class="btn ghost" href="../press/" hreflang="en">Press kit</a>
+  <div class="stage" id="stage">
+    <div class="lab" aria-hidden="true">
+      <canvas id="lab-canvas"></canvas>
+    </div>
+
+    <div class="hud" id="hud" role="region" aria-label="Giới thiệu">
+      <div class="hud-box hud-left hud-details" data-anchor="-0.85,3.3,0.2" data-step="0">
+        <div class="hud-panel">
+          <p class="hud-name" data-type>Đỗ Huy Toàn</p>
+          <p class="hud-loc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg><span data-type>Delaware, Hoa Kỳ</span></p>
+        </div>
+      </div>
+      <div class="hud-box hud-left hud-desc" data-anchor="-0.95,1.95,0.2" data-step="0.4" data-step-portrait="0" data-until-portrait="0.55">
+        <div class="hud-panel">
+          <div class="hud-portrait-head">
+            <p class="hud-name">Đỗ Huy Toàn</p>
+            <p class="hud-loc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>Delaware, Hoa Kỳ</p>
+          </div>
+          <p class="hud-copy" data-type>Doanh nhân Mỹ, nhà sáng lập &amp; CEO một công ty thương mại điện tử và truyền thông số. Xây dựng cửa hàng trực tuyến, kênh YouTube và sản phẩm tương tác, thường theo mô hình studio một người.</p>
+        </div>
+      </div>
+      <div class="hud-box hud-right hud-skills" data-anchor="0.95,2.75,0.2" data-step="0.8" data-step-portrait="0.6">
+        <div class="hud-tabbed">
+          <div class="hud-tab"><h2 data-type>Kỹ năng</h2><svg class="hud-tab-curve" viewBox="0 0 48 32" preserveAspectRatio="none" aria-hidden="true"><path class="fill" d="M0 0h4c18 0 18 31 40 31h4v1H0z"/><path class="line" d="M0 1h4c18 0 18 30 40 30h4"/></svg></div>
+          <ul class="hud-list">
+            <li data-type>Thương mại điện tử &amp; thương hiệu bán trực tiếp</li>
+            <li data-type>YouTube · 33 nghìn+ người đăng ký, 24 triệu+ lượt xem</li>
+            <li data-type>Hoạt hình &amp; video có hỗ trợ AI</li>
+            <li data-type>Game HTML5 &amp; ứng dụng web</li>
+            <li data-type>Nội dung 5 ngôn ngữ</li>
+          </ul>
+        </div>
+      </div>
+      <div class="hud-progress" aria-hidden="true">
+        <div class="hud-bar"><span id="hud-bar"></span></div>
+        <span id="hud-pct">0%</span>
       </div>
     </div>
-  </section>
 
-  <div class="wrap reveal">
-    <div class="stats" role="list">
-      <div class="stat" role="listitem"><b>33K+</b><span>người đăng ký</span></div>
-      <div class="stat" role="listitem"><b>24 triệu+</b><span>lượt xem</span></div>
-      <div class="stat" role="listitem"><b>3</b><span>kênh</span></div>
-      <div class="stat" role="listitem"><b>5</b><span>ngôn ngữ</span></div>
+    <div class="window" id="window">
+      <canvas id="office-canvas" aria-hidden="true"></canvas>
+      <div class="hero">
+        <div class="hero-copy">
+          <h1>Đỗ Huy<br>Toàn</h1>
+          <span class="tag tag-hero">Nhà sáng lập &amp; CEO</span>
+        </div>
+      </div>
+      <div class="scroll-icon" aria-hidden="true"><span></span></div>
     </div>
-    <p class="note center" style="margin-top:12px">Số liệu của kênh Do Huy Toan, tháng 10/2026.</p>
   </div>
 
-  <section id="channels">
-    <div class="wrap">
-      <div class="center reveal">
-        <h2 class="section-title">Ba kênh. Một studio.</h2>
-        <p class="section-sub">Mỗi kênh đều do một người viết, làm hoạt hình và dựng, cho khán giả ở nhiều nước.</p>
-      </div>
-      <div class="tiles">
-        <article class="tile dh reveal">
-          <div class="kicker">DIY Giáng sinh &amp; ngày lễ xưa</div>
-          <h3>Do Huy Toan</h3>
-          <p>Đồ trang trí phát sáng từ những thứ có sẵn trong nhà như ren cũ, lọ thủy tinh, cùng chuyện một phút về ngày lễ xưa ở Mỹ.</p>
-          <div class="foot"><span class="metric">Hơn 33.000 người đăng ký</span><a class="go" href="https://www.youtube.com/@dhtoan" rel="me">@dhtoan ›</a></div>
-        </article>
-        <article class="tile jd reveal">
-          <div class="kicker">Hoạt hình · ASMR · Đài Loan</div>
-          <h3>A Day of JD</h3>
-          <p>Loạt hoạt hình không lời về một ngày của chú hổ con ở Đài Loan, vẽ theo phong cách tranh Monet, tiêu đề bằng năm ngôn ngữ.</p>
-          <div class="foot"><span class="metric">Tập mới mỗi thứ Sáu</span><a class="go" href="https://www.youtube.com/@jdfamilia" rel="me">@jdfamilia ›</a></div>
-        </article>
-        <article class="tile map reveal">
-          <div class="kicker">Địa lý trong 60 giây</div>
-          <h3>Map a Day</h3>
-          <p>Biên giới, địa danh và sự thật bản đồ bất ngờ, giải thích trên ảnh vệ tinh NASA Blue Marble.</p>
-          <div class="foot"><span class="metric">Video ngắn giải thích</span><a class="go" href="https://www.youtube.com/@MapADay" rel="me">@MapADay ›</a></div>
-        </article>
-      </div>
+  <div class="spacer-hero" aria-hidden="true"></div>
+  <div class="spacer-about" id="about" aria-hidden="true"></div>
+
+  <section class="projects" id="projects" aria-labelledby="projects-title">
+    <div class="notches notches-top" aria-hidden="true"></div>
+    <div class="projects-head">
+      <span class="tag tag-sm">Tiêu biểu</span>
+      <h2 id="projects-title">Dự án</h2>
     </div>
+    <div class="cards">
+      <a class="card" href="https://www.youtube.com/@dhtoan" rel="me">
+        <div class="card-top">
+          <div class="card-img"><img src="../assets/img/dhtoan.jpg" width="800" height="450" loading="lazy" alt="Đồ trang trí Giáng sinh bằng ren phát sáng trên kênh Do Huy Toan"></div>
+          <span class="card-edge" aria-hidden="true"><span class="round round-accent"><svg viewBox="0 0 24 24"><path d="M4 12h15 M13 6l6 6-6 6"/></svg></span></span>
+        </div>
+        <h3>Do Huy Toan</h3>
+        <p>Ý tưởng DIY Giáng sinh phát sáng và chuyện một phút về ngày lễ xưa ở Mỹ. Hơn 33 nghìn người đăng ký.</p>
+      </a>
+      <a class="card" href="https://www.youtube.com/@jdfamilia" rel="me">
+        <div class="card-top">
+          <div class="card-img"><img src="../assets/img/jd.jpg" width="800" height="450" loading="lazy" alt="Chú hổ con JD trong khung cảnh Đài Loan vẽ theo phong cách Monet"></div>
+          <span class="card-edge" aria-hidden="true"><span class="round round-accent"><svg viewBox="0 0 24 24"><path d="M4 12h15 M13 6l6 6-6 6"/></svg></span></span>
+        </div>
+        <h3>A Day of JD</h3>
+        <p>Hoạt hình không lời về chú hổ con ở Đài Loan, phong cách tranh Monet, tiêu đề năm ngôn ngữ.</p>
+      </a>
+      <a class="card" href="https://www.youtube.com/@MapADay" rel="me">
+        <div class="card-top">
+          <div class="card-img"><img src="../assets/img/mapaday.jpg" width="800" height="450" loading="lazy" alt="Bản đồ vệ tinh trong một video ngắn của Map a Day"></div>
+          <span class="card-edge" aria-hidden="true"><span class="round round-accent"><svg viewBox="0 0 24 24"><path d="M4 12h15 M13 6l6 6-6 6"/></svg></span></span>
+        </div>
+        <h3>Map a Day</h3>
+        <p>Địa lý bất ngờ trong chưa đầy một phút, trên ảnh vệ tinh NASA Blue Marble.</p>
+      </a>
+      <div class="card card-soon">
+        <div class="card-top">
+          <div class="card-img card-art card-art-shop" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16l-1.5 12h-13z M8.5 8a3.5 3.5 0 0 1 7 0"/></svg></div>
+          <span class="tag tag-soon">Sắp ra mắt</span>
+        </div>
+        <h3>Thương hiệu thương mại điện tử</h3>
+        <p>Cửa hàng phụ kiện bán trực tiếp tới khách hàng.</p>
+      </div>
+      <div class="card card-soon">
+        <div class="card-top">
+          <div class="card-img card-art card-art-game" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 8h10a4 4 0 0 1 4 4v1a3 3 0 0 1-5.4 1.8L14.5 14h-5l-1.1 0.8A3 3 0 0 1 3 13v-1a4 4 0 0 1 4-4z M8 10.5v3 M6.5 12h3 M15.5 11.5h.01 M17.5 13h.01"/></svg></div>
+          <span class="tag tag-soon">Sắp ra mắt</span>
+        </div>
+        <h3>Nền tảng game HTML5</h3>
+        <p>Game nhẹ chơi ngay trên trình duyệt, mọi thiết bị.</p>
+      </div>
+      <a class="card card-new" href="#contact">
+        <div class="card-top"><div class="card-dashed" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14 M5 12h14"/></svg></div></div>
+        <h3>Bắt đầu dự án mới</h3>
+      </a>
+    </div>
+    <div class="notches notches-bottom" aria-hidden="true"></div>
   </section>
 
-  <section id="about" class="alt">
-    <div class="wrap about">
-      <p class="big reveal">Tự viết, đạo diễn và dựng từng video, trong một studio một người.</p>
-      <div class="body reveal">
-        <p>Đỗ Huy Toàn là nhà sáng tạo video độc lập sống tại Delaware, Mỹ. Kênh chính <strong>Do Huy Toan</strong> chia sẻ ý tưởng đồ trang trí Giáng sinh phát sáng và những câu chuyện ngắn về truyền thống ngày lễ xưa của nước Mỹ. Kênh đã vượt 33.000 người đăng ký và hơn 24 triệu lượt xem (tháng 10/2026).</p>
-        <p>Trên kênh <strong>JD</strong>, anh làm <em>A Day of JD</em>, loạt hoạt hình không lời theo phong cách ASMR, kể về một chú hổ con dạo quanh Đài Loan. Phim vẽ theo phong cách tranh Monet, chuyển động từng khung hình, và mỗi tập có tiêu đề bằng năm ngôn ngữ. Kênh <strong>Map a Day</strong> giải thích những sự thật địa lý bất ngờ trong chưa đầy một phút, dùng ảnh vệ tinh NASA Blue Marble.</p>
-        <p>Toàn công khai cách mình làm việc: anh dùng công cụ AI để tạo hình ảnh, rồi tự viết code dựng chuyển động, âm thanh và dựng phim. Anh quan tâm tới việc một người làm nội dung có thể kể chuyện cho khán giả nhiều nước cùng lúc.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="process">
-    <div class="wrap">
-      <div class="center reveal">
-        <h2 class="section-title">Làm như thế nào.</h2>
-        <p class="section-sub">Công khai công cụ, cẩn thận từng chi tiết.</p>
-      </div>
-      <div class="steps">
-        <div class="step reveal"><h3>Câu chuyện trước tiên</h3><p>Mỗi tập bắt đầu bằng kịch bản, storyboard và một mục tiêu rõ ràng cho người xem. Dữ kiện được đối chiếu với hai nguồn.</p></div>
-        <div class="step reveal"><h3>Hình ảnh có hỗ trợ AI</h3><p>Tranh, nhân vật và clip được tạo bằng công cụ AI hình ảnh và video, rồi được chọn lọc và chỉnh sửa bằng tay.</p></div>
-        <div class="step reveal"><h3>Chuyển động &amp; âm thanh bằng code</h3><p>Hoạt hình, chuyển động máy quay, âm thanh và bản dựng cuối đều làm bằng code riêng của studio.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="alt contact">
-    <div class="wrap reveal">
-      <h2 class="section-title">Liên hệ.</h2>
-      <p class="section-sub" style="margin-left:auto;margin-right:auto">Báo chí, hợp tác và liên hoan phim.</p>
-      <p class="mail"><a href="https://www.youtube.com/@dhtoan/about">Liên hệ qua YouTube</a><!-- EMAIL: thay link này bằng email báo chí --></p>
-      <div class="actions"><a class="btn primary" href="../press/" hreflang="en">Mở press kit</a></div>
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Cùng hợp tác<br>nhé!</h2>
+    <ul class="social" aria-label="Kênh và hồ sơ">
+      <li><a class="round round-big" href="https://www.youtube.com/@dhtoan" rel="me" aria-label="Do Huy Toan trên YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"/><path class="solid" d="M10.5 9.5v5l4-2.5z"/></svg></a></li>
+      <li><a class="round round-big" href="https://www.youtube.com/@jdfamilia" rel="me" aria-label="JD trên YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="15" r="3.6"/><circle cx="6.5" cy="10" r="1.8"/><circle cx="10" cy="6.5" r="1.8"/><circle cx="14" cy="6.5" r="1.8"/><circle cx="17.5" cy="10" r="1.8"/></svg></a></li>
+      <li><a class="round round-big" href="https://www.youtube.com/@MapADay" rel="me" aria-label="Map a Day trên YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17 M12 3.5c3 3 3 14 0 17 M12 3.5c-3 3-3 14 0 17"/></svg></a></li>
+      <li><a class="round round-big" href="https://github.com/dhtoan" rel="me" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5 M15 21v-3.2a3 3 0 0 0-.8-2.2c2.7-.3 5.5-1.3 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.5 2.9 5.5 3.2 5.5 3.2a4.3 4.3 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.1 9.6c0 4.7 2.8 5.7 5.5 6a3 3 0 0 0-.8 2.2V21"/></svg></a></li>
+    </ul>
+    <div class="contact-actions">
+      <a class="btn" href="https://www.youtube.com/@dhtoan/about">Liên hệ</a><!-- EMAIL: thay link này bằng mailto: email -->
+      <a class="btn btn-light" href="../press/" hreflang="en">Tài liệu báo chí</a>
     </div>
   </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <span>© 2026 Đỗ Huy Toàn</span>
-    <span><a href="../" hreflang="en" lang="en" data-lang="en">English</a> · Cập nhật 20/10/2026</span>
-  </div>
+<footer class="footer">
+  <a class="btn btn-lang" href="../" hreflang="en" lang="en" data-lang="en"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17 M12 3.5c3 3 3 14 0 17 M12 3.5c-3 3-3 14 0 17"/></svg>English</a>
+  <nav class="footer-links" aria-label="Chân trang"><a href="../press/" hreflang="en">Tài liệu báo chí</a><a href="https://www.youtube.com/@dhtoan/about">Liên hệ</a></nav>
+  <p>© 2026 Đỗ Huy Toàn</p>
 </footer>
-<script src="../assets/reveal.js" defer></script>
 </body>
 </html>
