@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;700;900&family=VT323&display=swap">
 <link rel="stylesheet" href="assets/site.css">
-<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script src="assets/home.js" defer></script>
 <script type="module" src="assets/scene.js"></script>
 <script type="application/ld+json">
@@ -83,10 +83,16 @@
 
 <header class="topbar">
   <a class="logo" href="./" aria-label="Do Huy Toan, home">dh<span>.</span></a>
-  <nav class="top-actions" aria-label="Main">
-    <a class="round" href="press/" aria-label="Press kit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z M8 9h8 M8 13h8 M8 17h5"/></svg></a>
-    <a class="round round-text" href="vi/" hreflang="vi" lang="vi" data-lang="vi" aria-label="Tiếng Việt">VI</a>
+  <nav class="pill-nav" aria-label="Main">
+    <span class="pill-ind" aria-hidden="true"></span>
+    <a href="#about" data-sec="about">About</a>
+    <a href="#projects" data-sec="projects">Projects</a>
+    <a href="#contact" data-sec="contact">Contact</a>
   </nav>
+  <div class="top-actions">
+    <a class="btn btn-cta" href="#contact">Get in touch</a>
+    <button class="round round-sound" id="sound" type="button" aria-pressed="false" aria-label="Play music" data-on="Play music" data-off="Pause music"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="solid" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="wave" d="M15.5 9a4 4 0 0 1 0 6 M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="mute" d="M16 9.5l5 5 M21 9.5l-5 5"/></svg></button>
+  </div>
 </header>
 
 <main id="main">
@@ -134,11 +140,12 @@
       <div class="hero">
         <div class="hero-copy">
           <h1>Do Huy<br>Toan</h1>
-          <span class="tag tag-hero">Founder &amp; CEO</span>
+          <span class="tag tag-hero" data-scramble>Founder &amp; CEO</span>
         </div>
       </div>
       <div class="scroll-icon" aria-hidden="true"><span></span></div>
     </div>
+    <canvas id="actor-canvas" class="actor" aria-hidden="true"></canvas>
   </div>
 
   <div class="spacer-hero" aria-hidden="true"></div>
@@ -200,6 +207,7 @@
   </section>
 
   <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="contact-scene" aria-hidden="true"><canvas id="contact-canvas"></canvas></div>
     <h2 id="contact-title">Let's work<br>together!</h2>
     <ul class="social" aria-label="Channels and profiles">
       <li><a class="round round-big" href="https://www.youtube.com/@dhtoan" rel="me" aria-label="Do Huy Toan on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"/><path class="solid" d="M10.5 9.5v5l4-2.5z"/></svg></a></li>
@@ -215,8 +223,10 @@
 </main>
 
 <footer class="footer">
+  <a class="round round-big to-top" href="#main" aria-label="Back to top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5 M6 11l6-6 6 6"/></svg></a>
   <a class="btn btn-lang" href="vi/" hreflang="vi" lang="vi" data-lang="vi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17 M12 3.5c3 3 3 14 0 17 M12 3.5c-3 3-3 14 0 17"/></svg>Tiếng Việt</a>
   <nav class="footer-links" aria-label="Footer"><a href="press/">Press kit</a><a href="https://www.youtube.com/@dhtoan/about">Contact</a></nav>
+  <p class="credit">Music composed in code, playing live in your browser</p>
   <p>© 2026 Do Huy Toan</p>
 </footer>
 </body>

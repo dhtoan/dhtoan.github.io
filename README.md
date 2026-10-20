@@ -1,6 +1,6 @@
 # dhtoan.github.io — trang giới thiệu + press kit
 
-Trang tĩnh, không cần build, không tải gì từ bên ngoài.
+Trang tĩnh, không cần build. Chỉ tải Three.js (jsDelivr) và font (Google Fonts) từ bên ngoài.
 
 | File | Nội dung |
 |---|---|

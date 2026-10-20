@@ -19,6 +19,8 @@
   --r-xxl: 24px;
   --header-h: 72px;
   --ease: cubic-bezier(.6, 0, .25, 1);
+  --orange: #ff9a2e;
+  --orange-2: #f2861b;
   color-scheme: light;
 }
 @media (min-width: 840px) { :root { --r-xxl: 48px; --header-h: 96px; } }
@@ -28,6 +30,8 @@ html[lang="vi"] { --font-title: "Be Vietnam Pro", system-ui, -apple-system, "Seg
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 body {
   margin: 0;
   background: var(--beige-600);
@@ -114,12 +118,52 @@ svg { display: block; }
   letter-spacing: -.01em;
   text-decoration: none;
   color: var(--text);
-  transition: color .3s ease;
+  transition: color .3s ease, opacity .3s ease;
 }
+html.at-top .logo { opacity: 0; pointer-events: none; }
 .logo span { color: var(--cyan); }
-.top-actions { display: flex; gap: 10px; }
+.top-actions { display: flex; align-items: center; gap: 10px; }
 html.lab-mode .logo { color: #fff; }
 html.lab-mode .topbar .round { background: rgba(225, 245, 255, .14); color: #fff; backdrop-filter: blur(6px); }
+
+/* centred pill nav with a sliding highlight */
+.pill-nav {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: flex; padding: 4px; border-radius: 999px;
+  background: rgba(233, 222, 208, .82); backdrop-filter: blur(8px);
+  border: 1px solid transparent;
+  transition: background-color .3s ease, border-color .3s ease;
+}
+.pill-nav a {
+  position: relative; z-index: 1;
+  min-width: 112px; padding: 9px 22px; border-radius: 999px; text-align: center;
+  font: 700 14px/1.2 var(--font-title); letter-spacing: .06em; text-transform: uppercase;
+  text-decoration: none; color: var(--text-2);
+  transition: color .25s ease;
+}
+@media (hover: hover) { .pill-nav a:hover { color: var(--text); } }
+.pill-nav a.on { color: #fff; }
+.pill-ind {
+  position: absolute; left: 0; top: 4px; bottom: 4px; width: 0; border-radius: 999px;
+  background: var(--orange); opacity: 0;
+  transition: transform .4s var(--ease), width .4s var(--ease), opacity .25s ease, background-color .3s ease;
+}
+html.lab-mode .pill-nav { background: rgba(4, 30, 100, .72); border-color: rgba(95, 220, 255, .3); }
+html.lab-mode .pill-nav a { color: var(--cyan-text); }
+html.lab-mode .pill-ind { background: #1689ff; }
+.btn-cta {
+  min-height: 44px; padding: 0 22px;
+  background: var(--orange); color: #fff;
+  font-size: 14px; letter-spacing: .06em; text-transform: uppercase;
+  box-shadow: 0 6px 18px rgba(242, 134, 27, .28);
+}
+@media (hover: hover) { .btn-cta:hover { background: var(--orange-2); } }
+.round-sound { border: 0; cursor: pointer; padding: 0; }
+.round-sound .wave { display: none; }
+.round-sound.on .wave { display: block; }
+.round-sound.on .mute { display: none; }
+@media (max-width: 899px) { .pill-nav a { min-width: 0; padding: 9px 16px; } }
+@media (max-width: 759px) { .pill-nav, .btn-cta { display: none; } }
 
 /* ---------- fixed stage: lab + office window ---------- */
 .stage { position: fixed; inset: 0; height: 100vh; height: 100lvh; z-index: 0; overflow: hidden; }
@@ -128,9 +172,10 @@ html.lab-mode .topbar .round { background: rgba(225, 245, 255, .14); color: #fff
   position: absolute; inset: 0;
   background: radial-gradient(ellipse 70% 60% at 50% 58%, #0d47c4 0%, #062e94 42%, var(--lab-deep) 100%);
 }
-.lab canvas, .window canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lab canvas, .window canvas, .actor { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.actor { z-index: 2; pointer-events: none; }
 .window {
-  position: absolute; inset: 0;
+  position: absolute; inset: 0; z-index: 1;
   background: var(--beige-400);
   overflow: hidden;
   transform-origin: 50% 100%;
@@ -165,7 +210,7 @@ html.lab-mode .topbar .round { background: rgba(225, 245, 255, .14); color: #fff
 @keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(10px); opacity: 0; } 100% { opacity: 0; } }
 
 /* ---------- HUD (about) ---------- */
-.hud { position: absolute; inset: 0; color: var(--cyan-text); font: 400 20px/1.25 var(--font-mono); pointer-events: none; }
+.hud { position: absolute; inset: 0; z-index: 3; color: var(--cyan-text); font: 400 20px/1.25 var(--font-mono); pointer-events: none; }
 .hud-box { position: absolute; opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s, transform .35s var(--ease); }
 .hud-box.on { opacity: 1; visibility: visible; }
 .hud-panel, .hud-list {
@@ -290,8 +335,14 @@ main { position: relative; }
 .card-dashed { height: 100%; border: 4px dashed var(--beige-700); border-radius: 16px; background: var(--beige-600); display: grid; place-items: center; color: var(--text-2); }
 .card-dashed svg { width: 40px; height: 40px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; }
 
-.contact { position: relative; z-index: 2; background: var(--beige-600); min-height: 70vh; padding: 48px var(--outer) 96px; display: flex; flex-direction: column; gap: 24px; }
-@media (min-width: 840px) { .contact { padding: 96px calc(100% / 12 + var(--outer)) 120px; gap: 36px; } }
+.contact { position: relative; z-index: 2; background: var(--beige-600); padding: 48px var(--outer) 0; display: flex; flex-direction: column; gap: 24px; overflow: hidden; }
+.contact > :not(.contact-scene) { position: relative; z-index: 1; }
+.contact-scene { order: 9; height: min(92vw, 520px); margin: 0 calc(var(--outer) * -1); }
+.contact-scene canvas { width: 100%; height: 100%; display: block; }
+@media (min-width: 840px) {
+  .contact { min-height: max(640px, 92vh); padding: 120px calc(100% / 12 + var(--outer)) 120px; gap: 36px; }
+  .contact-scene { position: absolute; top: 0; right: 0; bottom: 0; width: 64%; height: auto; margin: 0; }
+}
 .social { display: flex; flex-wrap: wrap; gap: 12px; }
 .contact-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
@@ -304,6 +355,8 @@ main { position: relative; }
   border-radius: var(--r-xxl) var(--r-xxl) 0 0;
 }
 .btn-lang { background: var(--beige-600); color: var(--text); }
+.to-top { background: var(--beige-600); }
+.credit { font-size: 14px; }
 .footer-links { display: flex; gap: 22px; }
 .footer-links a { text-decoration: none; color: var(--text); font-weight: 700; }
 @media (hover: hover) { .footer-links a:hover { text-decoration: underline; } }
