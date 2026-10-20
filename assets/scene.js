@@ -8,6 +8,7 @@
 // Rendering stops when a scene is off screen or the tab is hidden; reduced motion renders on scroll only.
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const html = document.documentElement;
@@ -178,6 +179,10 @@ function buildOffice(canvas) {
   const camera = new THREE.PerspectiveCamera(30, 1, .1, 100);
   const room = new THREE.Group(); scene.add(room);
   const W = '#ffffff', WOOD = '#dfb88a', DARK = '#3d3f4a';
+  // small baked room reflection so metal, glass and crystal read as shiny
+  const shine = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
+  const alu = new THREE.MeshStandardMaterial({ color: '#d5d8dd', metalness: .75, roughness: .32, envMap: shine, envMapIntensity: 1.3 });
+  const glass = new THREE.MeshStandardMaterial({ color: '#0d0e11', metalness: .2, roughness: .12, envMap: shine, envMapIntensity: .8 });
 
   // floor and back wall only catch shadows, so the room melts into the page background
   const floor = shadowCatcher(40, 40, .14); floor.rotation.x = -Math.PI / 2; room.add(floor);
@@ -189,11 +194,11 @@ function buildOffice(canvas) {
   });
 
   // shelf with books and a plant, pinboard with notes
-  const shelf = at(new THREE.Group(), -1.55, 3.05, -2.72); room.add(shelf);
-  shelf.add(rbox(1.35, .08, .4, .03, WOOD));
-  [['#f0a64a', .5, -.45], ['#8ea4c8', .56, -.31], ['#ece7df', .46, -.18]].forEach(([c, h, x]) => shelf.add(at(rbox(.12, h, .32, .02, c), x, .04 + h / 2, 0)));
-  shelf.add(at(cyl(.13, .1, .2, W, 20), .32, .14, 0));
-  [[0, .36, 0, .17], [-.08, .3, .05, .12], [.09, .32, -.03, .13]].forEach(([x, y, z, r]) => { const l = at(ball(r, '#7cc35b', 14), .32 + x, y, z); l.scale.y = 1.35; shelf.add(l); });
+  const shelf = at(new THREE.Group(), -1.55, 2.8, -2.72); room.add(shelf);
+  shelf.add(rbox(1.6, .08, .4, .03, WOOD));
+  [['#f0a64a', .5, -.55], ['#8ea4c8', .56, -.41], ['#ece7df', .46, -.28]].forEach(([c, h, x]) => shelf.add(at(rbox(.12, h, .32, .02, c), x, .04 + h / 2, 0)));
+  shelf.add(at(cyl(.13, .1, .2, W, 20), .47, .14, 0));
+  [[0, .36, 0, .17], [-.08, .3, .05, .12], [.09, .32, -.03, .13]].forEach(([x, y, z, r]) => { const l = at(ball(r, '#7cc35b', 14), .47 + x, y, z); l.scale.y = 1.35; shelf.add(l); });
   const board = at(new THREE.Group(), 1.35, 3.2, -2.86); room.add(board);
   board.add(rbox(1.9, 1.3, .08, .06, '#e7cfa8'));
   board.add(at(rbox(1.72, 1.12, .04, .03, '#b39377'), 0, 0, .04));
@@ -225,20 +230,30 @@ function buildOffice(canvas) {
   }
   [[-.82, .2, 'shop'], [.82, -.2, 'code']].forEach(([x, ry, kind]) => {
     const m = new THREE.Group();
-    m.add(rbox(1.5, .9, .08, .05, DARK));
-    m.add(at(new THREE.Mesh(new THREE.PlaneGeometry(1.4, .8), new THREE.MeshBasicMaterial({ map: screenTex(kind), toneMapped: false })), 0, 0, .042));
-    m.add(at(rbox(.08, .4, .08, .03, DARK), 0, -.6, -.05));
-    m.add(at(rbox(.5, .04, .3, .02, DARK), 0, -.79, -.02));
-    m.position.set(x, 2.29, -.25); m.rotation.y = ry; desk.add(m);
+    m.add(rbox(1.56, .9, .05, .025, alu));                     // aluminium enclosure
+    m.add(at(rbox(1.53, .87, .012, .02, glass), 0, 0, .027));  // black glass front, thin bezel
+    m.add(at(new THREE.Mesh(new THREE.PlaneGeometry(1.45, .8), new THREE.MeshBasicMaterial({ map: screenTex(kind), toneMapped: false })), 0, 0, .035));
+    const arm = at(rbox(.3, .66, .03, .012, alu), 0, -.5, -.16); arm.rotation.x = .32; m.add(arm); // slanted stand
+    m.add(at(rbox(.36, .022, .36, .01, alu), 0, -.8, -.2));                                     // foot
+    m.position.set(x, 2.31, -.22); m.rotation.y = ry; desk.add(m);
   });
   desk.add(at(rbox(1.05, .05, .32, .02, '#e9e8e4'), 0, 1.505, .3));
   desk.add(at(rbox(.13, .05, .2, .04, '#e9e8e4'), .78, 1.505, .32));
   // pencil cup, JD tiger figurine, desk globe, glowing lace-ball lamp
-  const cup = at(new THREE.Group(), -1.5, 1.48, .05); desk.add(cup);
+  // two compact aluminium desktop computers, stacked at the right end where the camera can see them
+  [[0, -.12], [.2, -.06]].forEach(([y, ry]) => {
+    const pc = at(new THREE.Group(), 1.5, 1.48 + y, -.3); pc.rotation.y = ry; desk.add(pc);
+    pc.add(at(rbox(.4, .19, .4, .05, alu), 0, .095, 0));
+    pc.add(at(rbox(.36, .012, .36, .006, '#8f939a'), 0, .006, 0));          // darker base ring
+    [-.1, -.04].forEach(px => pc.add(at(rbox(.035, .015, .01, .005, '#2b2d33'), px, .1, .2))); // front ports
+    pc.add(at(rbox(.07, .012, .01, .005, '#2b2d33'), .08, .1, .2));                           // card slot
+    pc.add(at(new THREE.Mesh(new THREE.CircleGeometry(.008, 10), new THREE.MeshBasicMaterial({ color: '#ffffff' })), -.16, .06, .201));
+  });
+  const cup = at(new THREE.Group(), -1.55, 1.48, .1); desk.add(cup);
   cup.add(at(cyl(.11, .1, .3, '#c6dcf3', 20), 0, .15, 0));
   [['#f4a64a', -.03, .1], ['#e2585a', .04, -.12]].forEach(([c, x, r]) => { const p = at(cyl(.022, .022, .42, c, 8), x, .38, 0); p.rotation.z = r; cup.add(p); });
   const fur = new THREE.MeshStandardMaterial({ roughness: .8, map: tex(128, 64, (g, w, h) => { g.fillStyle = '#f0913a'; g.fillRect(0, 0, w, h); g.fillStyle = '#2d241c'; for (let i = 0; i < 8; i++) g.fillRect(i * 16 + 3, 0, 5, 22); }) });
-  const tiger = at(new THREE.Group(), -1.05, 1.48, .25); tiger.rotation.y = .6; desk.add(tiger);
+  const tiger = at(new THREE.Group(), -1.1, 1.48, .3); tiger.rotation.y = .6; desk.add(tiger);
   tiger.add(at(mesh(new THREE.SphereGeometry(.13, 18, 12), fur), 0, .12, 0));
   tiger.add(at(mesh(new THREE.SphereGeometry(.13, 18, 12), fur), 0, .32, .03));
   [-1, 1].forEach(s => { tiger.add(at(ball(.04, '#f0913a', 10), .08 * s, .43, .02)); tiger.add(at(ball(.018, '#1a120d', 8), .045 * s, .34, .15)); });
@@ -246,9 +261,9 @@ function buildOffice(canvas) {
   const globe = at(new THREE.Mesh(new THREE.SphereGeometry(.17, 32, 24), new THREE.MeshStandardMaterial({ roughness: .5, map: tex(256, 128, (g, w, h) => {
     g.fillStyle = '#4f8fe0'; g.fillRect(0, 0, w, h); g.fillStyle = '#8cc878';
     [[45, 40, 30, 20], [65, 75, 18, 28], [128, 35, 22, 15], [135, 70, 20, 25], [190, 45, 40, 22]].forEach(([x, y, a, b]) => { g.beginPath(); g.ellipse(x, y, a, b, 0, 0, 7); g.fill(); });
-  }) })), 1.28, 1.79, .08); globe.castShadow = true; desk.add(globe);
-  desk.add(at(cyl(.07, .12, .14, WOOD, 16), 1.28, 1.55, .08));
-  const speaker = at(new THREE.Group(), 1.62, 1.48, .1); speaker.rotation.y = -.35; desk.add(speaker);
+  }) })), 1.12, 1.79, .3); globe.castShadow = true; desk.add(globe);
+  desk.add(at(cyl(.07, .12, .14, WOOD, 16), 1.12, 1.55, .3));
+  const speaker = at(new THREE.Group(), 1.6, 1.48, .3); speaker.rotation.y = -.35; desk.add(speaker);
   speaker.add(at(rbox(.34, .4, .3, .06, '#f2a33a'), 0, .2, 0));
   const cone = at(cyl(.12, .12, .03, '#3b3e48', 24), 0, .22, .155); cone.rotation.x = Math.PI / 2; speaker.add(cone);
   speaker.add(at(ball(.05, '#5b5f6b', 14), 0, .22, .16));
@@ -264,34 +279,41 @@ function buildOffice(canvas) {
   });
   picFrame.add(at(new THREE.Mesh(new THREE.PlaneGeometry(.96, .68), new THREE.MeshStandardMaterial({ map: pic, roughness: .8 })), 0, 0, .075));
 
-  // subscriber-goal plaques: milestones still to reach, labelled as goals (no platform logo)
-  const vi = document.documentElement.lang === 'vi';
-  const plaqueTexs = [];
-  const gem = new THREE.Mesh(new THREE.OctahedronGeometry(.13, 0), new THREE.MeshStandardMaterial({ color: '#d6f3ff', roughness: .08, metalness: .15, emissive: new THREE.Color('#5fbfff'), emissiveIntensity: .25, flatShading: true }));
-  [['100K', '#eef1f5', '#aeb6c2', -4.3], ['1M', '#ffd96b', '#c8961f', -3.5], ['10M', '#c9f0ff', '#68b8e8', -2.7]].forEach(([goal, light, deep, x], i) => {
-    const pl = at(new THREE.Group(), x, 2.75, -2.86); pl.scale.setScalar(1.3); room.add(pl);
-    pl.add(rbox(.6, .78, .06, .03, '#25272e'));
-    const draw = (g, w, h) => {
-      const bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#30333c'); bg.addColorStop(1, '#1d1f25');
-      g.fillStyle = bg; g.fillRect(0, 0, w, h);
-      g.strokeStyle = deep; g.lineWidth = 6; g.strokeRect(10, 10, w - 20, h - 20);
-      g.textAlign = 'center'; g.fillStyle = light;
-      g.font = '900 78px Urbanist, "Be Vietnam Pro", system-ui, sans-serif'; g.fillText(goal, w / 2, h * .74);
-      g.fillStyle = 'rgba(255,255,255,.7)'; g.font = '700 22px Urbanist, "Be Vietnam Pro", system-ui, sans-serif';
-      g.fillText(vi ? 'MỤC TIÊU' : 'SUBSCRIBER', w / 2, h * .84); g.fillText(vi ? 'NGƯỜI ĐĂNG KÝ' : 'GOAL', w / 2, h * .92);
-    };
-    const t = tex(256, 332, draw); plaqueTexs.push([t, draw]);
-    pl.add(at(new THREE.Mesh(new THREE.PlaneGeometry(.52, .7), new THREE.MeshStandardMaterial({ map: t, roughness: .5 })), 0, 0, .032));
-    if (i < 2) { // metal medallion
-      const disc = at(cyl(.13, .13, .03, mat(light, { metalness: .55, roughness: .28 }), 40), 0, .14, .05); disc.rotation.x = Math.PI / 2; pl.add(disc);
-      const rim = at(new THREE.Mesh(new THREE.TorusGeometry(.13, .012, 8, 40), mat(deep, { metalness: .6, roughness: .3 })), 0, .14, .066); pl.add(rim);
-    } else { gem.position.set(0, .15, .1); gem.scale.set(1, 1.3, 1); pl.add(gem); }
+  // play-button award plaques (silver and gold on the wall, diamond crystal on the shelf)
+  function playShape(w, h, r) {
+    const sh = new THREE.Shape(), x = -w / 2, y = -h / 2;
+    sh.moveTo(x + r, y); sh.lineTo(x + w - r, y); sh.quadraticCurveTo(x + w, y, x + w, y + r); sh.lineTo(x + w, y + h - r);
+    sh.quadraticCurveTo(x + w, y + h, x + w - r, y + h); sh.lineTo(x + r, y + h); sh.quadraticCurveTo(x, y + h, x, y + h - r);
+    sh.lineTo(x, y + r); sh.quadraticCurveTo(x, y, x + r, y);
+    const tri = new THREE.Path(); tri.moveTo(-h * .2, -h * .26); tri.lineTo(h * .32, 0); tri.lineTo(-h * .2, h * .26); tri.lineTo(-h * .2, -h * .26);
+    sh.holes.push(tri); return sh;
+  }
+  const nameTex = tex(256, 48, (g, w, h) => {
+    g.fillStyle = '#2a2b31'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#d9dce2'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = '700 24px Urbanist, system-ui, sans-serif';
+    g.fillText('Do Huy Toan', w / 2, h / 2 + 1);
   });
-  // redraw the labels once the page fonts have loaded
-  if (document.fonts) document.fonts.ready.then(() => plaqueTexs.forEach(([t, draw]) => { draw(t.image.getContext('2d'), t.image.width, t.image.height); t.needsUpdate = true; }));
+  if (document.fonts) document.fonts.ready.then(() => { const c = nameTex.image, g = c.getContext('2d'); g.fillStyle = '#2a2b31'; g.fillRect(0, 0, c.width, c.height); g.fillStyle = '#d9dce2'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = '700 24px Urbanist, system-ui, sans-serif'; g.fillText('Do Huy Toan', c.width / 2, c.height / 2 + 1); nameTex.needsUpdate = true; });
+  [['#b9bfc7', '#ffffff', -3.95], ['#d29a22', '#ffe7a3', -3.1]].forEach(([plate, logo, x]) => {
+    const aw = at(new THREE.Group(), x, 2.5, -2.86); aw.scale.setScalar(1.3); room.add(aw);
+    aw.add(rbox(.62, .8, .06, .025, '#1b1c21'));
+    const plateM = new THREE.MeshStandardMaterial({ color: plate, metalness: .55, roughness: .3, envMap: shine, envMapIntensity: 1.7 });
+    aw.add(at(rbox(.53, .7, .02, .012, plateM), 0, 0, .035));
+    const logoM = new THREE.MeshStandardMaterial({ color: logo, metalness: .7, roughness: .12, envMap: shine, envMapIntensity: 2.4 });
+    const btn = at(mesh(new THREE.ExtrudeGeometry(playShape(.3, .21, .06), { depth: .02, bevelEnabled: true, bevelSize: .008, bevelThickness: .008, bevelSegments: 2, curveSegments: 10 }), logoM, false), 0, .07, .046); aw.add(btn);
+    aw.add(at(rbox(.32, .06, .012, .004, plateM), 0, -.25, .048));
+    aw.add(at(new THREE.Mesh(new THREE.PlaneGeometry(.28, .045), new THREE.MeshStandardMaterial({ map: nameTex, roughness: .4 })), 0, -.25, .055));
+  });
+  // diamond: a faceted crystal play button standing on a dark base on the shelf
+  const diamond = at(new THREE.Group(), .06, .04, .02); diamond.scale.setScalar(1.3); shelf.add(diamond);
+  diamond.add(at(rbox(.42, .07, .2, .02, '#1f2026'), 0, .035, 0));
+  const crystalM = new THREE.MeshStandardMaterial({ color: '#5cc2ff', metalness: .25, roughness: .08, envMap: shine, envMapIntensity: 1.1, emissive: new THREE.Color('#1d8cff'), emissiveIntensity: .22, flatShading: true });
+  const crystal = at(mesh(new THREE.ExtrudeGeometry(playShape(.36, .26, .07), { depth: .06, bevelEnabled: true, bevelSize: .03, bevelThickness: .03, bevelSegments: 1, curveSegments: 4 }), crystalM, false), 0, .07 + .13 + .03, -.03);
+  diamond.add(crystal);
+  const sparkle = at(new THREE.PointLight('#bfefff', .6, 1.2, 2), 0, .25, .25); diamond.add(sparkle);
 
   // big potted plant in the front-right corner
-  const plant = at(new THREE.Group(), 2.85, 0, -.6); plant.scale.setScalar(.82); room.add(plant);
+  const plant = at(new THREE.Group(), 2.4, 0, -2.05); plant.scale.setScalar(.82); room.add(plant);
   [['#f1eee8', 0], ['#b99a7c', 1], ['#f1eee8', 2], ['#b99a7c', 3]].forEach(([c, i]) => plant.add(at(cyl(.5 - i * .025, .5 - (i + 1) * .025, .22, c, 32), 0, .11 + i * .22, 0)));
   plant.add(at(cyl(.47, .47, .04, '#6b4a33', 32), 0, .86, 0));
   const leafM = mat('#86c93c', { roughness: .55 }), leafD = mat('#6aae2c', { roughness: .55 });
@@ -340,7 +362,7 @@ function buildOffice(canvas) {
     camera.position.copy(look).addScaledVector(dir, dist);
     camera.lookAt(look);
     // the room fills the right side on landscape, the lower part on portrait
-    if (land) camera.setViewOffset(size.w, size.h, -size.w * .14, -size.h * .01, size.w, size.h);
+    if (land) camera.setViewOffset(size.w, size.h, -size.w * .14, -size.h * .035, size.w, size.h);
     else camera.setViewOffset(size.w, size.h, 0, -size.h * .14, size.w, size.h);
     camera.updateProjectionMatrix();
     // swivel round to face the visitor, then he is handed over to the actor canvas
@@ -350,7 +372,7 @@ function buildOffice(canvas) {
     const p = avatar.userData.parts, typing = reduce ? 0 : 1 - sw;
     p.armR.el.rotation.x = -.75 - sw * .35 + Math.sin(t * 11) * .04 * typing; p.armL.el.rotation.x = -.75 - sw * .35 + Math.cos(t * 9.5) * .04 * typing;
     p.head.rotation.y = (reduce ? 0 : Math.sin(t * .5) * .2) * typing; p.head.rotation.x = .08 * (1 - sw) + (reduce ? 0 : Math.sin(t * .8) * .03);
-    if (!reduce) { globe.rotation.y = t * .5; gem.rotation.y = t * .7; }
+    if (!reduce) { globe.rotation.y = t * .5; sparkle.intensity = .5 + Math.sin(t * 1.7) * .25; }
     renderer.render(scene, camera);
     p.pelvis.getWorldPosition(pv); p.head.getWorldPosition(hv);
     [handoff.px, handoff.py] = toScreen(pv); [handoff.hx, handoff.hy] = toScreen(hv);
