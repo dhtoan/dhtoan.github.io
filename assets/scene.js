@@ -15,6 +15,11 @@ const S = () => window.dhtScroll || { pIn: 0, pAbout: 0, pSec: 0, land: innerWid
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const smooth = v => { v = clamp(v); return v * v * (3 - 2 * v); };
 const lerp = (a, b, k) => a + (b - a) * k;
+// hero timeline (scroll progress pIn): the chair swivels round, then the founder jumps out and lands on the pedestal
+const SWIVEL_END = .22, LAND_AT = .88;
+const jumpProgress = pIn => clamp((pIn - SWIVEL_END) / (LAND_AT - SWIVEL_END));
+// screen-space pose of the seated founder, written by the office each frame and read by the actor at take-off
+const handoff = { ok: false, px: 0, py: 0, hx: 0, hy: 0, yaw: 0, elev: 0 };
 
 function finishLoading(ok) {
   const pct = document.getElementById('loader-pct'), loader = document.getElementById('loader');
@@ -179,7 +184,7 @@ function buildOffice(canvas) {
   const wall = shadowCatcher(40, 14, .1); wall.position.set(0, 7, -2.95); room.add(wall);
 
   // layered square rug
-  [['#e8913a', 4.6], ['#f3aa45', 3.95], ['#f7c65e', 3.3], ['#fadc86', 2.4]].forEach(([c, s], i) => {
+  [['#e58a2b', 4.8], ['#f3c456', 4.25], ['#ec9b36', 3.75], ['#f6dc85', 3.2]].forEach(([c, s], i) => {
     const r = rbox(s, .05, s, .04, mat(c, { roughness: .95 })); r.position.set(.1, .025 + i * .012, -.55); r.castShadow = false; room.add(r);
   });
 
@@ -194,7 +199,8 @@ function buildOffice(canvas) {
   board.add(at(rbox(1.72, 1.12, .04, .03, '#b39377'), 0, 0, .04));
   [['#bcd3f2', -.45, .18, .1], ['#ffffff', .4, -.15, -.08], ['#fff0a8', -.1, -.25, .05]].forEach(([c, x, y, r]) => {
     const n = at(rbox(.46, .55, .012, .005, c), x, y, .075); n.rotation.z = r; n.castShadow = false; board.add(n);
-    board.add(at(ball(.055, '#e2585a', 14), x, y + .22, .1));
+    const pin = at(cyl(.085, .085, .07, '#e5636b', 20), x - .02, y + .2, .12); pin.rotation.x = Math.PI / 2; board.add(pin);
+    board.add(at(ball(.07, '#ea7077', 16), x - .02, y + .2, .17));
   });
 
   // desk
@@ -242,14 +248,60 @@ function buildOffice(canvas) {
     [[45, 40, 30, 20], [65, 75, 18, 28], [128, 35, 22, 15], [135, 70, 20, 25], [190, 45, 40, 22]].forEach(([x, y, a, b]) => { g.beginPath(); g.ellipse(x, y, a, b, 0, 0, 7); g.fill(); });
   }) })), 1.28, 1.79, .08); globe.castShadow = true; desk.add(globe);
   desk.add(at(cyl(.07, .12, .14, WOOD, 16), 1.28, 1.55, .08));
-  const lace = new THREE.MeshStandardMaterial({ color: '#fff3d6', emissive: new THREE.Color('#ffc060'), emissiveIntensity: .9, roughness: .6, map: tex(128, 64, (g, w, h) => {
-    g.fillStyle = '#ffe8b8'; g.fillRect(0, 0, w, h); g.strokeStyle = '#d7a75e'; g.lineWidth = 2;
-    for (let i = 0; i < 12; i++) for (let k = 0; k < 6; k++) { g.beginPath(); g.arc(i * 11 + (k % 2) * 5, k * 11 + 5, 4, 0, 7); g.stroke(); }
-  }) });
-  const lamp = at(new THREE.Mesh(new THREE.SphereGeometry(.2, 28, 20), lace), 1.68, 1.68, -.3); desk.add(lamp);
-  desk.add(at(new THREE.PointLight('#ffbf6a', 1.4, 2.5, 2), 1.68, 1.7, 0));
+  const speaker = at(new THREE.Group(), 1.62, 1.48, .1); speaker.rotation.y = -.35; desk.add(speaker);
+  speaker.add(at(rbox(.34, .4, .3, .06, '#f2a33a'), 0, .2, 0));
+  const cone = at(cyl(.12, .12, .03, '#3b3e48', 24), 0, .22, .155); cone.rotation.x = Math.PI / 2; speaker.add(cone);
+  speaker.add(at(ball(.05, '#5b5f6b', 14), 0, .22, .16));
 
-  // chair with a sled base
+  // framed picture on the wall, right of the board
+  const picFrame = at(new THREE.Group(), 3.15, 2.55, -2.86); picFrame.rotation.z = -.05; room.add(picFrame);
+  picFrame.add(rbox(1.25, .95, .1, .1, '#9fbde3'));
+  picFrame.add(at(rbox(1.0, .72, .04, .05, '#dfe9f6'), 0, 0, .05));
+  const pic = tex(256, 184, (g, w, h) => {
+    g.fillStyle = '#dfe9f6'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#8fb0dc'; g.beginPath(); g.moveTo(10, h - 14); g.lineTo(96, 58); g.lineTo(150, 120); g.lineTo(186, 86); g.lineTo(w - 10, h - 14); g.closePath(); g.fill();
+    g.fillStyle = '#ffffff'; g.beginPath(); g.arc(188, 52, 22, 0, 7); g.fill();
+  });
+  picFrame.add(at(new THREE.Mesh(new THREE.PlaneGeometry(.96, .68), new THREE.MeshStandardMaterial({ map: pic, roughness: .8 })), 0, 0, .075));
+
+  // subscriber-goal plaques: milestones still to reach, labelled as goals (no platform logo)
+  const vi = document.documentElement.lang === 'vi';
+  const plaqueTexs = [];
+  const gem = new THREE.Mesh(new THREE.OctahedronGeometry(.13, 0), new THREE.MeshStandardMaterial({ color: '#d6f3ff', roughness: .08, metalness: .15, emissive: new THREE.Color('#5fbfff'), emissiveIntensity: .25, flatShading: true }));
+  [['100K', '#eef1f5', '#aeb6c2', -4.3], ['1M', '#ffd96b', '#c8961f', -3.5], ['10M', '#c9f0ff', '#68b8e8', -2.7]].forEach(([goal, light, deep, x], i) => {
+    const pl = at(new THREE.Group(), x, 2.75, -2.86); pl.scale.setScalar(1.3); room.add(pl);
+    pl.add(rbox(.6, .78, .06, .03, '#25272e'));
+    const draw = (g, w, h) => {
+      const bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#30333c'); bg.addColorStop(1, '#1d1f25');
+      g.fillStyle = bg; g.fillRect(0, 0, w, h);
+      g.strokeStyle = deep; g.lineWidth = 6; g.strokeRect(10, 10, w - 20, h - 20);
+      g.textAlign = 'center'; g.fillStyle = light;
+      g.font = '900 78px Urbanist, "Be Vietnam Pro", system-ui, sans-serif'; g.fillText(goal, w / 2, h * .74);
+      g.fillStyle = 'rgba(255,255,255,.7)'; g.font = '700 22px Urbanist, "Be Vietnam Pro", system-ui, sans-serif';
+      g.fillText(vi ? 'MỤC TIÊU' : 'SUBSCRIBER', w / 2, h * .84); g.fillText(vi ? 'NGƯỜI ĐĂNG KÝ' : 'GOAL', w / 2, h * .92);
+    };
+    const t = tex(256, 332, draw); plaqueTexs.push([t, draw]);
+    pl.add(at(new THREE.Mesh(new THREE.PlaneGeometry(.52, .7), new THREE.MeshStandardMaterial({ map: t, roughness: .5 })), 0, 0, .032));
+    if (i < 2) { // metal medallion
+      const disc = at(cyl(.13, .13, .03, mat(light, { metalness: .55, roughness: .28 }), 40), 0, .14, .05); disc.rotation.x = Math.PI / 2; pl.add(disc);
+      const rim = at(new THREE.Mesh(new THREE.TorusGeometry(.13, .012, 8, 40), mat(deep, { metalness: .6, roughness: .3 })), 0, .14, .066); pl.add(rim);
+    } else { gem.position.set(0, .15, .1); gem.scale.set(1, 1.3, 1); pl.add(gem); }
+  });
+  // redraw the labels once the page fonts have loaded
+  if (document.fonts) document.fonts.ready.then(() => plaqueTexs.forEach(([t, draw]) => { draw(t.image.getContext('2d'), t.image.width, t.image.height); t.needsUpdate = true; }));
+
+  // big potted plant in the front-right corner
+  const plant = at(new THREE.Group(), 2.85, 0, -.6); plant.scale.setScalar(.82); room.add(plant);
+  [['#f1eee8', 0], ['#b99a7c', 1], ['#f1eee8', 2], ['#b99a7c', 3]].forEach(([c, i]) => plant.add(at(cyl(.5 - i * .025, .5 - (i + 1) * .025, .22, c, 32), 0, .11 + i * .22, 0)));
+  plant.add(at(cyl(.47, .47, .04, '#6b4a33', 32), 0, .86, 0));
+  const leafM = mat('#86c93c', { roughness: .55 }), leafD = mat('#6aae2c', { roughness: .55 });
+  [[0, .15, 1.15], [1.3, .35, 1.0], [2.5, .3, .95], [3.7, .4, 1.1], [5, .25, 1.0], [.7, .05, .8], [4.3, .1, .85]].forEach(([a, lean, len], i) => {
+    const leaf = mesh(new THREE.SphereGeometry(.5, 20, 14), i % 2 ? leafD : leafM);
+    leaf.scale.set(.32, len, .08); leaf.position.y = len * .5;
+    const holder = at(new THREE.Group(), 0, .86, 0); holder.rotation.set(0, a, .25 + lean); holder.add(leaf); plant.add(holder);
+  });
+
+  // chair with a sled base; chair and founder swivel together
   const chair = at(new THREE.Group(), 0, 0, -.9); room.add(chair);
   chair.add(at(rbox(1, .14, .92, .07, W), 0, .78, 0));
   const back = at(rbox(1, .9, .12, .06, W), 0, 1.33, .47); back.rotation.x = -.1; chair.add(back);
@@ -260,7 +312,15 @@ function buildOffice(canvas) {
   });
 
   const avatar = makeChibi(); applyPose(avatar.userData.parts, POSES.sit);
-  avatar.position.set(0, -.08, -.98); avatar.rotation.y = Math.PI; room.add(avatar);
+  avatar.position.set(0, -.08, -.08); avatar.rotation.y = Math.PI; chair.add(avatar);
+  const winEl = document.getElementById('window'), pv = new THREE.Vector3(), hv = new THREE.Vector3();
+  function toScreen(v) { // office world -> page pixels, including the CSS lift/tilt of the window
+    v.project(camera);
+    let x = (v.x + 1) / 2 * size.w, y = (1 - v.y) / 2 * size.h;
+    const tr = getComputedStyle(winEl).transform;
+    if (tr && tr !== 'none') { const q = new DOMMatrix(tr).transformPoint(new DOMPoint(x - size.w / 2, y - size.h)); x = q.x + size.w / 2; y = q.y + size.h; }
+    return [x, y];
+  }
 
   scene.add(new THREE.HemisphereLight('#fff7ec', '#e2c9a6', 1.35));
   sunLight(scene, '#fff1dc', 2.2, [5, 10, 8], 7);
@@ -275,23 +335,26 @@ function buildOffice(canvas) {
     mx += (tmx - mx) * k; my += (tmy - my) * k;
     const land = S().land, a = camera.aspect;
     camera.fov = land ? 30 : 34;
-    const dist = land ? (a > 1.6 ? 11.5 : 13) : 19;
+    const dist = land ? (a > 1.6 ? 10.2 : 11.6) : 17;
     dir.set(.95 + mx * .1, .62 - my * .05, 1.2).normalize();
     camera.position.copy(look).addScaledVector(dir, dist);
     camera.lookAt(look);
     // the room fills the right side on landscape, the lower part on portrait
-    if (land) camera.setViewOffset(size.w, size.h, -size.w * .19, size.h * .06, size.w, size.h);
+    if (land) camera.setViewOffset(size.w, size.h, -size.w * .14, -size.h * .01, size.w, size.h);
     else camera.setViewOffset(size.w, size.h, 0, -size.h * .14, size.w, size.h);
     camera.updateProjectionMatrix();
-    avatar.visible = S().pIn < .05; // he jumps out once the window starts to lift
-    if (!reduce) {
-      globe.rotation.y = t * .5;
-      lamp.material.emissiveIntensity = .8 + Math.sin(t * 2.2) * .18;
-      const p = avatar.userData.parts;
-      p.armR.el.rotation.x = -.75 + Math.sin(t * 11) * .04; p.armL.el.rotation.x = -.75 + Math.cos(t * 9.5) * .04;
-      p.head.rotation.y = Math.sin(t * .5) * .2; p.head.rotation.x = .08 + Math.sin(t * .8) * .03;
-    }
+    // swivel round to face the visitor, then he is handed over to the actor canvas
+    const pIn = S().pIn, sw = smooth(pIn / SWIVEL_END), az = Math.atan2(dir.x, dir.z);
+    chair.rotation.y = (Math.atan2(.95, 1.2) - Math.PI) * sw;
+    avatar.visible = jumpProgress(pIn) <= 0;
+    const p = avatar.userData.parts, typing = reduce ? 0 : 1 - sw;
+    p.armR.el.rotation.x = -.75 - sw * .35 + Math.sin(t * 11) * .04 * typing; p.armL.el.rotation.x = -.75 - sw * .35 + Math.cos(t * 9.5) * .04 * typing;
+    p.head.rotation.y = (reduce ? 0 : Math.sin(t * .5) * .2) * typing; p.head.rotation.x = .08 * (1 - sw) + (reduce ? 0 : Math.sin(t * .8) * .03);
+    if (!reduce) { globe.rotation.y = t * .5; gem.rotation.y = t * .7; }
     renderer.render(scene, camera);
+    p.pelvis.getWorldPosition(pv); p.head.getWorldPosition(hv);
+    [handoff.px, handoff.py] = toScreen(pv); [handoff.hx, handoff.hy] = toScreen(hv);
+    handoff.yaw = Math.PI + chair.rotation.y - az; handoff.elev = Math.asin(dir.y); handoff.ok = true;
   }
   return { resize, frame };
 }
@@ -372,7 +435,9 @@ function buildLab(canvas, actorCanvas) {
   const base = .45, SC = 1.15, HT = 2.95 * SC;
   const solidKeep = new THREE.Plane(new THREE.Vector3(0, 1, 0), -base);
   const ghostKeep = new THREE.Plane(new THREE.Vector3(0, -1, 0), base);
-  const hero = new THREE.Group(); actorScene.add(hero);
+  const hero = new THREE.Group(); hero.rotation.order = 'ZXY'; actorScene.add(hero);
+  const fwd = new THREE.Vector3(), ray = new THREE.Vector3(), start = new THREE.Vector3(), ctrl = new THREE.Vector3(), end = new THREE.Vector3(0, base, 0), takeoff = new THREE.Vector3();
+  let tookOff = false;
   const solid = makeChibi(); solid.scale.setScalar(SC); hero.add(solid);
   solid.traverse(o => { if (o.isMesh) { o.material = o.material.clone(); o.material.clippingPlanes = [solidKeep]; } });
   const ghost = makeChibi(); ghost.scale.setScalar(SC); hero.add(ghost);
@@ -415,19 +480,33 @@ function buildLab(canvas, actorCanvas) {
     else { camera.position.set(mx * .3, 3.6 + settle * 1.6, 12 + settle * 1.5); camera.lookAt(0, 1.0 + settle * .5, 0); }
     camera.updateProjectionMatrix();
 
-    // the jump: out of the window, towards the camera and down onto the pedestal
-    const f = clamp((s.pIn - .05) / .85);
-    const showActor = s.pIn > .05;
+    // the jump: from the chair (matched to where the office drew him), towards the camera, down onto the pedestal
+    const f = jumpProgress(s.pIn);
+    const showActor = f > 0;
+    if (!showActor) tookOff = false;
     if (showActor !== actorShown) { actorShown = showActor; actorCanvas.style.visibility = showActor ? '' : 'hidden'; }
-    // quadratic Bezier: from his seat (right, up) through a point near the camera, down to the pedestal
+    // start point: the seated founder's pelvis on screen, pushed to the depth that gives the same size
+    camera.updateMatrixWorld();
+    const ndcX = handoff.px / size.w * 2 - 1, ndcY = 1 - handoff.py / size.h * 2;
+    const dpx = Math.max(8, Math.hypot(handoff.hx - handoff.px, handoff.hy - handoff.py));
+    const depth = 1.33 * SC * (size.h / 2) / Math.tan(camera.fov * Math.PI / 360) / dpx;
+    camera.getWorldDirection(fwd);
+    ray.set(ndcX, ndcY, .5).unproject(camera).sub(camera.position).normalize();
+    start.copy(camera.position).addScaledVector(ray, depth / Math.max(.2, ray.dot(fwd))); start.y -= SC;
     const e = smooth(f), u = 1 - e;
-    const p0x = land ? 2.2 : .6, p0y = base + (land ? 2.4 : 3.2), cx = land ? -1.6 : -.6, cy = base + (land ? 2.6 : 3.4);
-    hero.position.set(u * u * p0x + 2 * u * e * cx, u * u * p0y + 2 * u * e * cy + e * e * base, 2 * u * e * 4.4 + u * u * .5);
-    hero.scale.setScalar(lerp(.7, 1, smooth(f / .3)));
-    const air = 1 - smooth((f - .78) / .1), crouch = smooth((f - .84) / .07) * (1 - smooth((f - .93) / .07));
-    let pose = mixPose(POSES.stand, POSES.fall, air); pose = mixPose(pose, POSES.crouch, crouch);
+    // the curve's control point is fixed at take-off; only the start keeps following the lifting window
+    if (!tookOff || f < .02) { takeoff.copy(start); tookOff = true; }
+    ctrl.set(takeoff.x * .5, Math.max(takeoff.y, base) + 1.2, takeoff.z * .5 + 2.2);
+    hero.position.set(0, 0, 0).addScaledVector(start, u * u).addScaledVector(ctrl, 2 * u * e).addScaledVector(end, e * e);
+    // pose: seated -> airborne -> crouch on landing -> standing
+    const rise = smooth(f / .3), air = 1 - smooth((f - .78) / .1), crouch = smooth((f - .84) / .07) * (1 - smooth((f - .93) / .07));
+    let pose = mixPose(POSES.stand, mixPose(POSES.sit, POSES.fall, rise), air); pose = mixPose(pose, POSES.crouch, crouch);
     const sway = reduce ? 0 : Math.sin(t * .45) * .12;
-    hero.rotation.set(Math.sin(f * Math.PI) * -.15, lerp(2.5, 0, e) + sway * (1 - air) + mx * .25, 0);
+    // orientation: same yaw, camera pitch and on-screen roll as the office drew him, easing to face the visitor
+    camera.getWorldDirection(fwd);
+    const roll = Math.atan2(handoff.hx - handoff.px, handoff.py - handoff.hy);
+    const k0 = 1 - smooth(f / .55);
+    hero.rotation.set((handoff.elev - Math.asin(-fwd.y)) * k0, handoff.yaw * k0 + (sway * (1 - air) + mx * .25) * e, -roll * k0);
     if (!reduce && f >= 1) { pose.sp += Math.sin(t * 1.6) * .015; pose.hd += Math.sin(t * .7) * .04; }
     applyPose(solid.userData.parts, pose); applyPose(ghost.userData.parts, pose);
     const landed = smooth((f - .85) / .15);

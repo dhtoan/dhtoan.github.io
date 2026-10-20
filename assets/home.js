@@ -75,10 +75,12 @@
     state.pIn = pIn; state.pAbout = pAbout; state.pSec = pSec;
 
     // office window lifts away with rounded bottom corners
+    // the window waits while the chair swivels (scene.js), then lifts with an ease-in
+    var w = clamp((pIn - .12) / .88); w = w * w * (3 - 2 * w) * .5 + w * .5;
     var lift = land ? 108 : 104, tilt = land ? 4.3 : 0;
-    win.style.transform = pIn > 0 ? 'translate3d(0,' + (-lift * pIn).toFixed(3) + '%,0) rotate(' + (tilt * pIn).toFixed(3) + 'deg)' : '';
-    win.style.setProperty('--wr', Math.min(1, pIn * 10) * R + 'px');
-    win.style.setProperty('--wp', pIn.toFixed(3));
+    win.style.transform = w > 0 ? 'translate3d(0,' + (-lift * w).toFixed(3) + '%,0) rotate(' + (tilt * w).toFixed(3) + 'deg)' : '';
+    win.style.setProperty('--wr', Math.min(1, w * 10) * R + 'px');
+    win.style.setProperty('--wp', w.toFixed(3));
     win.style.visibility = pIn >= 1 ? 'hidden' : '';
 
     // HUD boxes and progress
