@@ -93,13 +93,14 @@ function makeChibi() {
   const skull = mesh(new THREE.SphereGeometry(.56, 40, 30), skin); skull.scale.set(1.04, .97, .98); head.add(skull);
   const jaw = mesh(new THREE.SphereGeometry(.45, 32, 24), skin); jaw.scale.set(1.04, .78, .94); jaw.position.set(0, -.17, .08); head.add(jaw);
   [-1, 1].forEach(s => { const e = mesh(new THREE.SphereGeometry(.12, 16, 12), skin); e.scale.set(.55, 1, .8); e.position.set(.57 * s, -.05, -.02); head.add(e); });
-  P.eyes = [];
+  P.eyes = []; P.lids = [];
   [-1, 1].forEach(s => {
     const eye = at(mesh(new THREE.SphereGeometry(.085, 20, 16), dark, false), .2 * s, -.04, .5); eye.scale.set(.88, 1.22, .5); head.add(eye);
     const hl = at(new THREE.Mesh(new THREE.SphereGeometry(.024, 10, 8), new THREE.MeshBasicMaterial({ color: '#ffffff' })), .2 * s + .028, 0, .54); head.add(hl);
     const brow = at(caps(.024, .1, hair), .21 * s, .13, .52); brow.rotation.z = Math.PI / 2 + .12 * s; head.add(brow);
     const cheek = at(new THREE.Mesh(new THREE.SphereGeometry(.07, 16, 12), new THREE.MeshBasicMaterial({ color: '#ff9f8c', transparent: true, opacity: .35, depthWrite: false })), .33 * s, -.17, .44); cheek.scale.set(1, .6, .3); head.add(cheek);
     P.eyes.push(eye, hl);
+    const lid = at(mesh(new THREE.TorusGeometry(.055, .014, 6, 16, Math.PI), dark, false), .2 * s, -.03, .53); lid.rotation.z = Math.PI; lid.visible = false; head.add(lid); P.lids.push(lid);
   });
   head.add(at(ball(.045, '#efbb96', 12), 0, -.1, .55));
   const mouth = at(mesh(new THREE.TorusGeometry(.05, .013, 6, 16, Math.PI), '#7c3b2d', false), 0, -.23, .5); mouth.rotation.z = Math.PI; head.add(mouth);
@@ -113,20 +114,24 @@ function makeChibi() {
   });
   function arm(s) {
     const sh = new THREE.Group(); sh.position.set(.4 * s, .62, 0); spine.add(sh);
-    sh.add(ball(.15, shirt, 16));
-    sh.add(at(caps(.13, .1, shirt), 0, -.12, 0));
-    sh.add(at(caps(.09, .14, skin), 0, -.24, 0));
-    const el = new THREE.Group(); el.position.y = -.33; sh.add(el);
-    el.add(at(caps(.085, .16, skin), 0, -.12, 0));
-    const hand = at(ball(.11, skin, 16), 0, -.3, 0); hand.scale.set(.9, 1, .8); el.add(hand);
-    return { sh, el };
+    // upper arm and forearm share one radius and their round ends are centred on the elbow pivot,
+    // so the arm stays one smooth tube however far the elbow bends
+    const AR = .088, UP = .33, LOW = .27;
+    sh.add(at(caps(AR, UP, skin), 0, -UP / 2, 0));
+    sh.add(ball(.15, shirt, 20));
+    const sleeve = at(mesh(new THREE.CylinderGeometry(.135, .125, .2, 20), shirt), 0, -.1, 0); sh.add(sleeve);
+    const el = new THREE.Group(); el.position.y = -UP; sh.add(el);
+    el.add(at(caps(AR, LOW, skin), 0, -LOW / 2, 0));
+    const hand = at(ball(.11, skin, 16), 0, -LOW - .02, 0); hand.scale.set(.9, 1, .8); el.add(hand);
+    return { sh, el, hand };
   }
   P.armL = arm(-1); P.armR = arm(1);
   function leg(s) {
     const hp = new THREE.Group(); hp.position.set(.16 * s, -.02, 0); pelvis.add(hp);
-    hp.add(at(caps(.15, .22, pants), 0, -.2, 0));
-    const kn = new THREE.Group(); kn.position.y = -.42; hp.add(kn);
-    kn.add(at(caps(.14, .18, pants), 0, -.15, 0));
+    const LR = .145, TH = .42, SH = .3; // same trick as the arms: one radius, round ends on the knee pivot
+    hp.add(at(caps(LR, TH, pants), 0, -TH / 2, 0));
+    const kn = new THREE.Group(); kn.position.y = -TH; hp.add(kn);
+    kn.add(at(caps(LR, SH, pants), 0, -SH / 2, 0));
     kn.add(at(cyl(.155, .155, .08, '#2f343e'), 0, -.31, 0));
     kn.add(at(cyl(.1, .1, .07, '#ece9e3', 16), 0, -.37, 0));
     const shoe = new THREE.Group(); shoe.position.set(0, -.46, .07); kn.add(shoe);
@@ -145,7 +150,6 @@ const POSES = {
   sit: { py: 1, sp: .06, hd: .08, hip: [-1.57, -1.57], kn: [1.57, 1.57], shx: [-.95, -.95], shz: [.12, .12], el: [-.75, -.75] },
   fall: { py: 1, sp: -.1, hd: -.2, hip: [-.75, -.2], kn: [1, .5], shx: [-.5, .3], shz: [1.25, 1.1], el: [-.9, -.5] },
   crouch: { py: .72, sp: .35, hd: -.2, hip: [-1.05, -1.05], kn: [1.75, 1.75], shx: [-.6, -.6], shz: [.5, .5], el: [-.5, -.5] },
-  sleep: { py: .22, sp: -.08, hd: .32, hip: [-1.5, -1.42], kn: [.25, .4], shx: [-.55, -.5], shz: [.2, .2], el: [-.9, -.85] },
 };
 function mixPose(a, b, k) {
   const o = {};
@@ -160,7 +164,7 @@ function applyPose(P, p) {
   P.armL.sh.rotation.z = -p.shz[0]; P.armR.sh.rotation.z = p.shz[1];
   P.armL.el.rotation.x = p.el[0]; P.armR.el.rotation.x = p.el[1];
 }
-function closeEyes(P, closed) { P.eyes.forEach((e, i) => { if (i % 2) e.visible = !closed; else e.scale.y = closed ? .16 : 1.22; }); }
+function closeEyes(P, closed) { P.eyes.forEach(e => { e.visible = !closed; }); P.lids.forEach(l => { l.visible = closed; }); }
 
 // ---------- 1. office ----------
 function buildOffice(canvas) {
@@ -375,7 +379,14 @@ function buildLab(canvas, actorCanvas) {
   const ghostMat = new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: .24, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, clippingPlanes: [ghostKeep] });
   const ghostWire = new THREE.MeshBasicMaterial({ color: CYAN, wireframe: true, transparent: true, opacity: .09, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, clippingPlanes: [ghostKeep] });
   const ghostMeshes = []; ghost.traverse(o => { if (o.isMesh) ghostMeshes.push(o); });
-  ghostMeshes.forEach(o => { o.material = ghostMat; o.add(new THREE.Mesh(o.geometry, ghostWire)); });
+  // depth pre-pass: the ghost's own surfaces hide each other, so only the outer skin glows
+  // and overlapping parts (joints, sleeves) don't show as bright seams
+  const ghostDepth = new THREE.MeshBasicMaterial({ colorWrite: false, clippingPlanes: [ghostKeep], polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+  ghostMeshes.forEach(o => {
+    o.material = ghostMat; o.renderOrder = 2;
+    const w = new THREE.Mesh(o.geometry, ghostWire); w.renderOrder = 3; o.add(w);
+    const d = new THREE.Mesh(o.geometry, ghostDepth); d.renderOrder = 1; o.add(d);
+  });
   const scan = new THREE.Mesh(new THREE.TorusGeometry(.75, .02, 6, 96), glow(CYAN, 1)); scan.rotation.x = Math.PI / 2; actorScene.add(scan);
   const scanDisc = new THREE.Mesh(new THREE.CircleGeometry(.75, 48), glow(CYAN, .16)); scanDisc.rotation.x = -Math.PI / 2; actorScene.add(scanDisc);
   actorScene.add(new THREE.HemisphereLight('#f4f8ff', '#8a7a6a', 1.2));
@@ -457,58 +468,118 @@ function buildLab(canvas, actorCanvas) {
   return { resize, frame, idle };
 }
 
-// ---------- 4. contact: asleep between shipping boxes ----------
+// ---------- 4. contact: standing guard over the parcels, dozing off when nobody moves ----------
+// Awake: arms crossed, head follows the mouse. After a while without the pointer moving (on touch screens
+// a few seconds after the last tap) he falls asleep on his feet: head drops, eyes close, arms hang, Zs rise.
 function buildContact(canvas) {
   const renderer = makeRenderer(canvas, true);
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(28, 1, .1, 100);
-  const floor = shadowCatcher(40, 40, .16); floor.rotation.x = -Math.PI / 2; scene.add(floor);
-  const card = mat('#d9ae7c', { roughness: .9 }), tape = mat('#c69760', { roughness: .6 });
+  const camera = new THREE.PerspectiveCamera(30, 1, .1, 100);
+  const floor = shadowCatcher(40, 40, .15); floor.rotation.x = -Math.PI / 2; scene.add(floor);
+  const card = mat('#dcbf98', { roughness: .9 }), tape = mat('#c9a679', { roughness: .65 });
   const labelTex = tex(128, 96, (g, w, h) => {
-    g.fillStyle = '#fbfaf6'; g.fillRect(0, 0, w, h); g.fillStyle = '#2d2a24';
+    g.fillStyle = '#fbfaf6'; g.fillRect(0, 0, w, h); g.fillStyle = '#4a463e';
     for (let i = 0; i < 4; i++) g.fillRect(12, 14 + i * 14, 60 + (i % 2) * 30, 6);
     for (let i = 0; i < 22; i++) g.fillRect(12 + i * 4.5, 74, i % 3 ? 2 : 3, 14);
   });
   function parcel(w, h, d, x, z, ry, y = 0, label = true) {
     const b = at(new THREE.Group(), x, y + h / 2, z); b.rotation.y = ry; scene.add(b);
-    b.add(rbox(w, h, d, .035, card));
-    b.add(at(rbox(.16, .012, d + .005, .004, tape), 0, h / 2, 0));
-    b.add(at(rbox(.16, h * .35, .012, .004, tape), 0, h / 2 - h * .17, d / 2));
-    if (label) b.add(at(new THREE.Mesh(new THREE.PlaneGeometry(w * .3, w * .22), new THREE.MeshStandardMaterial({ map: labelTex, roughness: .8 })), -w * .22, -h * .1, d / 2 + .004));
+    b.add(rbox(w, h, d, .04, card));
+    b.add(at(rbox(w + .004, .1, d * .22, .01, tape), 0, h / 2 - .045, 0));
+    b.add(at(rbox(w * .2, h * .3, .012, .004, tape), 0, h / 2 - h * .15, d / 2));
+    if (label) b.add(at(new THREE.Mesh(new THREE.PlaneGeometry(w * .22, w * .16), new THREE.MeshStandardMaterial({ map: labelTex, roughness: .8 })), w * .3, h * .15, d / 2 + .004));
     return b;
   }
-  parcel(1.4, 1, 1.1, 1.75, -.7, -.12);
-  parcel(1.05, .78, .9, 1.7, -.75, .18, 1);
-  parcel(.85, .62, .75, 2.75, .5, .5, 0, false);
-  parcel(.7, .5, .6, -1.9, -1.1, .3);
-  parcel(.55, .42, .5, -1.75, -1.15, -.25, .5, false);
-  [[-1.1, 1.1, .4], [-.4, 1.7, -.6], [.9, 1.5, .9], [2.3, 1.6, 1.4], [-2.2, .3, 2.1]].forEach(([x, z, r]) => {
-    const p = at(rbox(.56, .012, .4, .004, '#fbfaf6'), x, .008, z); p.rotation.y = r; p.castShadow = false; scene.add(p);
-    const fold = at(rbox(.56, .002, .012, .001, '#d9d3c7'), x, .016, z); fold.rotation.y = r; scene.add(fold);
+  parcel(1.6, 1.0, 1.15, 3.0, -1.7, -.08);
+  parcel(1.2, .78, .95, 3.05, -1.75, .1, 1);
+  parcel(1.05, .62, .82, 1.55, -1.2, .06);
+  parcel(1.3, .82, 1.05, 3.7, 1.25, .28, 0, false);
+  // envelopes, some white and some pale blue
+  function envTex(body, flap) {
+    return tex(160, 112, (g, w, h) => {
+      g.fillStyle = body; g.fillRect(0, 0, w, h);
+      g.strokeStyle = flap; g.lineWidth = 4; g.beginPath(); g.moveTo(2, 2); g.lineTo(w / 2, h * .58); g.lineTo(w - 2, 2); g.stroke();
+      g.lineWidth = 2; g.beginPath(); g.moveTo(2, h - 2); g.lineTo(w * .4, h * .5); g.moveTo(w - 2, h - 2); g.lineTo(w * .6, h * .5); g.stroke();
+    });
+  }
+  const envs = [envTex('#fbfaf7', '#d8d3ca'), envTex('#cfdcec', '#a9bdd6')].map(map => new THREE.MeshStandardMaterial({ map, roughness: .85 }));
+  [[-.95, .75, .5, 0], [-.55, 1.1, -.35, 1], [1.05, -.45, .7, 0], [1.55, -.2, -.3, 1], [2.25, .45, .4, 0], [.95, 1.5, 1.2, 0], [-2.1, -.4, 2.3, 1], [2.75, 1.0, -.6, 0]].forEach(([x, z, r, m]) => {
+    const e = at(mesh(new THREE.BoxGeometry(.6, .012, .42), envs[m], false), x, .008, z); e.rotation.y = r; scene.add(e);
   });
-  const avatar = makeChibi(); const P = avatar.userData.parts;
-  applyPose(P, POSES.sleep); closeEyes(P, true); P.head.rotation.z = .3;
-  avatar.position.set(.35, 0, .05); avatar.rotation.y = -.35; scene.add(avatar);
-  const sh = blob(2.4, .22); sh.position.set(.35, .004, .2); scene.add(sh);
-  // floating Z z z
-  const zTex = tex(128, 128, (g, w, h) => { g.fillStyle = '#2d2a24'; g.font = '900 104px Urbanist, system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('Z', w / 2, h / 2 + 6); });
-  const zs = [0, 1, 2].map(i => { const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: zTex, transparent: true, depthWrite: false })); scene.add(sp); return sp; });
-  scene.add(new THREE.HemisphereLight('#fff6ea', '#d7bf9d', 1.3));
-  sunLight(scene, '#fff1dc', 2.1, [4, 9, 7], 6);
-  let size = { w: 1, h: 1 };
+  const onTop = at(mesh(new THREE.BoxGeometry(.6, .012, .42), envs[0], false), 2.75, 1.02, -1.15); onTop.rotation.set(0, -.5, -.06); scene.add(onTop);
+
+  const avatar = makeChibi(); const P = avatar.userData.parts; scene.add(avatar);
+  const sh = blob(2, .25); sh.position.set(0, .004, .05); scene.add(sh);
+  // arm rotations for "crossed" and "hanging", built from directions (the limbs rest along -y)
+  const DOWN = new THREE.Vector3(0, -1, 0);
+  function armQuats(upper, fore) {
+    const s = new THREE.Quaternion().setFromUnitVectors(DOWN, new THREE.Vector3(...upper).normalize());
+    const local = new THREE.Vector3(...fore).normalize().applyQuaternion(s.clone().invert());
+    return { s, e: new THREE.Quaternion().setFromUnitVectors(DOWN, local) };
+  }
+  const ARMS = [-1, 1].map(side => ({
+    side,
+    cross: armQuats([side * .04, -.74, .66], [-side * .94, side > 0 ? .17 : .07, side > 0 ? .36 : .22]),
+    hang: armQuats([side * .13, -.99, .05], [side * .02, -.99, .14]),
+  }));
+  const zTex = tex(128, 128, (g, w) => {
+    g.strokeStyle = '#2d2a24'; g.lineWidth = 13; g.lineJoin = 'miter'; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(w * .2, w * .24); g.lineTo(w * .82, w * .2); g.lineTo(w * .22, w * .8); g.lineTo(w * .84, w * .76); g.stroke();
+  });
+  const zs = [0, 1, 2].map(() => { const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: zTex, transparent: true, depthWrite: false, opacity: 0 })); scene.add(sp); return sp; });
+
+  scene.add(new THREE.HemisphereLight('#fff6ea', '#d9c3a3', 1.35));
+  sunLight(scene, '#fff1dc', 2.1, [-4, 9, 7], 6);
+  const fill = new THREE.DirectionalLight('#e4ecff', .35); fill.position.set(6, 3, 4); scene.add(fill);
+
+  // pointer: mouse moves keep him awake and he looks at the cursor; a tap wakes him on touch screens
+  const hover = matchMedia('(hover: hover)').matches;
+  let px = -1, py = -1, lastMove = -1e9, nowS = 0, sleep = hover ? 0 : 1, yaw = 0, pitch = 0, size = { w: 1, h: 1 };
+  window.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse') return; px = e.clientX; py = e.clientY; lastMove = nowS; }, { passive: true });
+  canvas.addEventListener('pointerdown', () => { lastMove = nowS; });
+  const head = new THREE.Vector3();
   function resize() { size = fit(renderer, camera, canvas); }
-  function frame(t) {
-    const land = size.w >= size.h * .9;
-    camera.fov = land ? 28 : 32;
-    camera.position.set(6.5, 6.2, 10.5); camera.lookAt(land ? .55 : .7, 1, 0);
+  function frame(t, dt) {
+    nowS = t;
+    const land = size.w >= size.h;
+    camera.fov = land ? 30 : 32;
+    if (land) { camera.position.set(.15, 2.6, 8.8); camera.lookAt(.15, 1.3, 0); }
+    else { camera.position.set(.3, 2.75, 7.2); camera.lookAt(.3, 1.85, 0); }
     camera.updateProjectionMatrix();
-    const b = reduce ? 0 : Math.sin(t * 1.4);
-    P.spine.rotation.x = POSES.sleep.sp + b * .025; P.head.rotation.x = POSES.sleep.hd + b * .04;
+
+    const idle = t - lastMove, target = reduce ? (hover ? 0 : 1) : (idle > (hover ? 9 : 3.5) ? 1 : 0);
+    sleep += (target - sleep) * Math.min(1, dt * (target > sleep ? 1.1 : 4));
+    const k = smooth(sleep);
+    // look at the cursor while awake
+    let ty = 0, tp = 0;
+    if (hover && px >= 0 && k < .5) {
+      P.head.getWorldPosition(head); head.project(camera);
+      const r = canvas.getBoundingClientRect();
+      const hx = r.left + (head.x + 1) / 2 * r.width, hy = r.top + (1 - head.y) / 2 * r.height;
+      ty = clamp((px - hx) / Math.max(400, r.width) * 1.6, -.6, .6); tp = clamp((py - hy) / Math.max(400, r.height) * 1.2, -.3, .35);
+    }
+    const ease = reduce ? 1 : Math.min(1, dt * 6); yaw += (ty - yaw) * ease; pitch += (tp - pitch) * ease;
+    const b = reduce ? 0 : Math.sin(t * (1.6 - k * .6));
+    applyPose(P, POSES.stand);
+    P.spine.rotation.x = lerp(-.02, .12, k) + b * .012;
+    P.head.rotation.set(lerp(pitch - .04, .42, k) + b * .02 * (1 + k), yaw * (1 - k), lerp(0, .14, k));
+    ARMS.forEach(({ side, cross, hang }) => {
+      const arm = side < 0 ? P.armL : P.armR;
+      arm.sh.quaternion.slerpQuaternions(cross.s, hang.s, k);
+      arm.el.quaternion.slerpQuaternions(cross.e, hang.e, k);
+      // chibi forearms are too short to fold across the chest, so they stretch while crossed
+      const st = lerp(1.9, 1, k); arm.el.scale.y = st; arm.hand.scale.y = 1 / st;
+    });
+    [P.legL, P.legR].forEach((l, i) => { l.hp.rotation.z = (i ? 1 : -1) * .05; l.kn.rotation.x = k * .06; });
+    P.pelvis.position.y = 1 - k * .02;
+    // blink now and then while awake; eyes shut when asleep
+    const blink = !reduce && k < .5 && (t % 4.3) < .12;
+    closeEyes(P, k > .5 || blink);
     zs.forEach((z, i) => {
-      const k = reduce ? (i + .5) / 3 : (t * .28 + i / 3) % 1;
-      z.position.set(.75 + k * .9 + Math.sin(k * 6 + i) * .08, 2.75 + k * 1.3, .2);
-      const sc = .22 + k * .26; z.scale.set(sc, sc, 1);
-      z.material.opacity = Math.sin(k * Math.PI);
+      const q = reduce ? (i + .5) / 3 : (t * .3 + i / 3) % 1;
+      z.position.set(.55 + q * .95 + Math.sin(q * 5 + i) * .06, 3.15 + q * 1.15, .3);
+      const sc = .24 + q * .3; z.scale.set(sc, sc, 1);
+      z.material.opacity = Math.sin(q * Math.PI) * clamp((k - .6) / .4);
     });
     renderer.render(scene, camera);
   }
@@ -531,7 +602,7 @@ function draw(now) {
   let any = false;
   if (s.active && s.pIn < 1) { office.frame(t, dt); any = true; }
   if (s.active && s.pIn > .005) { lab.frame(t, dt); any = true; } else lab.idle();
-  if (contact && contactOn) { contact.frame(t); any = true; }
+  if (contact && contactOn) { contact.frame(t, dt); any = true; }
   return any;
 }
 function loop(now) {
