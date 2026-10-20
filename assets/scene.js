@@ -268,14 +268,58 @@ function buildOffice(canvas) {
   const cone = at(cyl(.12, .12, .03, '#3b3e48', 24), 0, .22, .155); cone.rotation.x = Math.PI / 2; speaker.add(cone);
   speaker.add(at(ball(.05, '#5b5f6b', 14), 0, .22, .16));
 
-  // framed picture on the wall, right of the board
-  const picFrame = at(new THREE.Group(), 3.15, 2.55, -2.86); picFrame.rotation.z = -.05; room.add(picFrame);
-  picFrame.add(rbox(1.25, .95, .1, .1, '#9fbde3'));
-  picFrame.add(at(rbox(1.0, .72, .04, .05, '#dfe9f6'), 0, 0, .05));
-  const pic = tex(256, 184, (g, w, h) => {
-    g.fillStyle = '#dfe9f6'; g.fillRect(0, 0, w, h);
-    g.fillStyle = '#8fb0dc'; g.beginPath(); g.moveTo(10, h - 14); g.lineTo(96, 58); g.lineTo(150, 120); g.lineTo(186, 86); g.lineTo(w - 10, h - 14); g.closePath(); g.fill();
-    g.fillStyle = '#ffffff'; g.beginPath(); g.arc(188, 52, 22, 0, 7); g.fill();
+  // framed family portrait on the wall, right of the board: Baba (left) and Mama (right) kiss the baby's cheeks
+  const picFrame = at(new THREE.Group(), 3.0, 2.4, -2.86); picFrame.rotation.z = -.05; room.add(picFrame);
+  picFrame.add(rbox(1.25, .95, .1, .1, '#d9b48a'));
+  picFrame.add(at(rbox(1.0, .72, .04, .05, '#fbf6ee'), 0, 0, .05));
+  const pic = tex(512, 363, (g, w, h) => {
+    const SKIN = '#f7d2b2', BLUSH = 'rgba(255,140,130,.45)', INK = '#2b201b';
+    const bg = g.createLinearGradient(0, 0, w, h); bg.addColorStop(0, '#fde9d6'); bg.addColorStop(1, '#f7cfc0');
+    g.fillStyle = bg; g.fillRect(0, 0, w, h);
+    g.fillStyle = 'rgba(255,255,255,.35)';
+    [[60, 60, 26], [450, 70, 34], [420, 300, 22], [80, 280, 18], [250, 40, 14]].forEach(([x, y, r]) => { g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); });
+    const ell = (x, y, rx, ry, c, rot = 0) => { g.fillStyle = c; g.beginPath(); g.ellipse(x, y, rx, ry, rot, 0, 7); g.fill(); };
+    // bodies: Baba's black tee, Mama's pink top, the baby's yellow onesie
+    ell(120, 400, 128, 112, '#2b2d34'); ell(392, 400, 128, 112, '#f2a7b6'); ell(256, 392, 78, 70, '#ffd36b');
+    // Mama's long hair falls behind her head and shoulders
+    ell(374, 232, 92, 112, '#3a2a22', -.28);
+    function parent(cx, cy, r, rot, side, hair) {
+      g.save(); g.translate(cx, cy); g.rotate(rot);
+      ell(-r * .98 * side, 0, r * .16, r * .22, SKIN);            // outer ear
+      ell(0, 0, r, r * .96, SKIN);
+      ell(-r * .45 * side, r * .32, r * .2, r * .12, BLUSH);
+      // closed, happy eyes
+      g.strokeStyle = INK; g.lineWidth = r * .07; g.lineCap = 'round';
+      [-.42, .18].forEach(ex => { g.beginPath(); g.arc(ex * r * side, r * .05, r * .13, Math.PI * 1.1, Math.PI * 1.9); g.stroke(); });
+      // hair cap with bangs
+      g.fillStyle = hair; g.beginPath();
+      g.arc(0, 0, r * 1.04, Math.PI * 1.02, Math.PI * 1.98);
+      g.quadraticCurveTo(r * .6, -r * .1, r * .25, -r * .35); g.quadraticCurveTo(0, -r * .15, -r * .3, -r * .38); g.quadraticCurveTo(-r * .7, -r * .15, -r * 1.02, -r * .05);
+      g.fill();
+      g.restore();
+    }
+    function lips(cx, cy, r, rot, side) {
+      g.save(); g.translate(cx, cy); g.rotate(rot);
+      const lx = r * .8 * side, ly = r * .3;
+      ell(lx, ly, r * .13, r * .11, '#e0607a'); ell(lx + r * .01 * side, ly, r * .06, r * .05, '#a83652');
+      g.restore();
+    }
+    parent(152, 198, 76, .28, 1, '#1d1714');    // Baba
+    parent(360, 198, 76, -.28, -1, '#3a2a22');  // Mama
+    // the baby, in front
+    const bx = 256, by = 216, br = 64;
+    ell(bx - br * .96, by + 4, br * .15, br * .2, SKIN); ell(bx + br * .96, by + 4, br * .15, br * .2, SKIN);
+    ell(bx, by, br, br * .95, SKIN);
+    ell(bx - br * .5, by + br * .32, br * .2, br * .13, BLUSH); ell(bx + br * .5, by + br * .32, br * .2, br * .13, BLUSH);
+    [-1, 1].forEach(sd => { ell(bx + sd * br * .32, by + br * .02, br * .11, br * .14, INK); ell(bx + sd * br * .32 + br * .04, by - br * .04, br * .04, br * .04, '#ffffff'); });
+    g.fillStyle = '#c94a5a'; g.beginPath(); g.ellipse(bx, by + br * .4, br * .16, br * .13, 0, 0, Math.PI); g.fill();
+    g.strokeStyle = '#5a3a2a'; g.lineWidth = 5; g.lineCap = 'round'; g.beginPath(); g.moveTo(bx - 4, by - br * .9); g.quadraticCurveTo(bx + 14, by - br * 1.25, bx + 4, by - br * 1.32); g.stroke();
+    // little hearts
+    function heart(x, y, sz, c) { g.fillStyle = c; g.beginPath(); g.moveTo(x, y + sz * .35); g.bezierCurveTo(x - sz, y - sz * .3, x - sz * .45, y - sz, x, y - sz * .4); g.bezierCurveTo(x + sz * .45, y - sz, x + sz, y - sz * .3, x, y + sz * .35); g.fill(); }
+    // the kisses land on the baby's cheeks
+    lips(152, 198, 76, .28, 1); lips(360, 198, 76, -.28, -1);
+    heart(196, 196, 11, '#ff5d7e'); heart(316, 196, 11, '#ff5d7e');
+    heart(256, 96, 22, '#ff6f8b'); heart(214, 118, 14, '#ff8fa5'); heart(300, 112, 16, '#ff8fa5');
   });
   picFrame.add(at(new THREE.Mesh(new THREE.PlaneGeometry(.96, .68), new THREE.MeshStandardMaterial({ map: pic, roughness: .8 })), 0, 0, .075));
 
