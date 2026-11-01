@@ -8,6 +8,7 @@
 <title>Đỗ Huy Toàn — Nhà sáng lập &amp; CEO, thương mại điện tử và truyền thông số</title>
 <meta name="description" content="Đỗ Huy Toàn là doanh nhân Mỹ ở Delaware, nhà sáng lập và CEO một công ty thương mại điện tử và truyền thông số, chủ các kênh YouTube Do Huy Toan, JD và Map a Day.">
 <meta name="theme-color" content="#f5efe6">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://dhtoan.github.io/vi/">
 <link rel="alternate" hreflang="en" href="https://dhtoan.github.io/">
 <link rel="alternate" hreflang="vi" href="https://dhtoan.github.io/vi/">
@@ -16,7 +17,9 @@
 <meta property="og:title" content="Đỗ Huy Toàn — Nhà sáng lập &amp; CEO">
 <meta property="og:description" content="Doanh nhân Mỹ ở Delaware: thương mại điện tử, truyền thông số và ba kênh YouTube.">
 <meta property="og:url" content="https://dhtoan.github.io/vi/">
-<meta property="og:image" content="https://dhtoan.github.io/assets/portrait.jpg">
+<meta property="og:image" content="https://dhtoan.github.io/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale" content="vi_VN">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
@@ -26,7 +29,6 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script src="../assets/home.js" defer></script>
-<script type="module" src="../assets/scene.js"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -35,7 +37,7 @@
   "url": "https://dhtoan.github.io/vi/",
   "name": "Đỗ Huy Toàn — Nhà sáng lập & CEO",
   "inLanguage": "vi",
-  "dateModified": "2026-10-20",
+  "dateModified": "2026-11-01",
   "mainEntity": {"@id": "https://dhtoan.github.io/#person"}
 }
 </script>
@@ -44,7 +46,13 @@
 <a class="skip" href="#main">Bỏ qua tới nội dung</a>
 <div class="loader" id="loader" aria-hidden="true"><span id="loader-pct">0%</span></div>
 <script>
-(function(){var h=document.documentElement,el=document.getElementById('loader-pct'),p=0,t=setInterval(function(){
+(function(){var h=document.documentElement,el=document.getElementById('loader-pct'),p=0,gl=null;
+  try{var c=document.createElement('canvas');gl=c.getContext('webgl2')||c.getContext('webgl');}catch(e){}
+  if(!gl){h.classList.add('no-webgl','scene-ready');document.getElementById('loader').classList.add('done');return;}
+  var x=gl.getExtension('WEBGL_lose_context');if(x)x.loseContext();
+  // after the page is parsed (scene.js looks up the canvases), like the deferred module tag it replaces
+  document.addEventListener('DOMContentLoaded',function(){var s=document.createElement('script');s.type='module';s.src='../assets/scene.js';document.head.appendChild(s);});
+  var t=setInterval(function(){
   if(h.classList.contains('scene-ready')){clearInterval(t);return;}
   p=Math.min(90,p+Math.max(1,(90-p)*.08));el.textContent=Math.round(p)+'%';},60);
   setTimeout(function(){if(!h.classList.contains('scene-ready')){h.classList.add('no-webgl','scene-ready');document.getElementById('loader').classList.add('done');}},7000);})();
@@ -68,6 +76,7 @@
   <div class="stage" id="stage">
     <div class="lab" aria-hidden="true">
       <canvas id="lab-canvas"></canvas>
+      <div class="lab-fallback"><span class="lf-floor"></span><span class="lf-beam"></span><span class="lf-ring"></span><span class="lf-ring lf-ring-2"></span></div>
     </div>
 
     <div class="hud" id="hud" role="region" aria-label="Giới thiệu">
@@ -93,7 +102,7 @@
             <li data-type>Thương mại điện tử &amp; thương hiệu bán trực tiếp</li>
             <li data-type>YouTube · 33 nghìn+ người đăng ký, 24 triệu+ lượt xem</li>
             <li data-type>Hoạt hình &amp; video có hỗ trợ AI</li>
-            <li data-type>Game HTML5 &amp; ứng dụng web</li>
+            <li data-type>Ứng dụng desktop &amp; web · C++, Swift, JS</li>
             <li data-type>Nội dung 5 ngôn ngữ</li>
           </ul>
         </div>
@@ -112,6 +121,7 @@
           <span class="tag tag-hero" data-scramble>Nhà sáng lập &amp; CEO</span>
         </div>
       </div>
+      <div class="hero-art" aria-hidden="true"><img src="../assets/img/dokey.jpg" width="800" height="450" loading="lazy" alt=""><img src="../assets/img/jd.jpg" width="800" height="450" loading="lazy" alt=""><img src="../assets/img/dhtoan.jpg" width="800" height="450" loading="lazy" alt=""></div>
       <div class="scroll-icon" aria-hidden="true"><span></span></div>
     </div>
     <canvas id="actor-canvas" class="actor" aria-hidden="true"></canvas>
@@ -126,7 +136,21 @@
       <span class="tag tag-sm">Tiêu biểu</span>
       <h2 id="projects-title">Dự án</h2>
     </div>
+    <ul class="stats" aria-label="Những con số"><li class="stat reveal"><b data-count="33">33</b><i>K+</i><span>người đăng ký YouTube</span></li><li class="stat reveal"><b data-count="24">24</b><i>Tr+</i><span>lượt xem video</span></li><li class="stat reveal"><b data-count="3">3</b><i></i><span>kênh, 5 ngôn ngữ</span></li><li class="stat reveal"><b data-count="20.635">20.635</b><i></i><span>bài kiểm thử của Dokey</span></li></ul>
     <div class="cards">
+      <a class="card card-feature" href="https://github.com/dhtoan/Dokey">
+        <div class="card-top">
+          <div class="card-img"><img src="../assets/img/dokey.jpg" width="800" height="450" loading="lazy" alt="Bảng điều khiển Dokey trên macOS"></div>
+          <span class="card-edge" aria-hidden="true"><span class="round round-accent"><svg viewBox="0 0 24 24"><path d="M4 12h15 M13 6l6 6-6 6"/></svg></span></span>
+        </div>
+        <div class="card-body">
+          <span class="tag tag-sm tag-new">Miễn phí · Mac &amp; Windows</span>
+          <h3>Dokey</h3>
+          <p>Bộ gõ tiếng Việt viết lại từ đầu bằng C++17 và Swift. Mỗi phím gõ dựng lại cả từ và đối chiếu với 3.759 âm tiết, nên không nhảy chữ, không mất chữ, kể cả trong Chrome, Claude và ứng dụng Electron.</p>
+          <p class="typer done" aria-hidden="true"><span class="typer-keys">dduowngf</span><span class="typer-arrow">→</span><span class="typer-out">đường</span></p>
+          <ul class="chips"><li>macOS</li><li>Windows 10 / 11</li><li>Telex · VNI</li><li>Mã trên GitHub</li></ul>
+        </div>
+      </a>
       <a class="card" href="https://www.youtube.com/@dhtoan" rel="me">
         <div class="card-top">
           <div class="card-img"><img src="../assets/img/dhtoan.jpg" width="800" height="450" loading="lazy" alt="Đồ trang trí Giáng sinh bằng ren phát sáng trên kênh Do Huy Toan"></div>
@@ -134,6 +158,7 @@
         </div>
         <h3>Do Huy Toan</h3>
         <p>Ý tưởng DIY Giáng sinh phát sáng và chuyện một phút về ngày lễ xưa ở Mỹ. Hơn 33 nghìn người đăng ký.</p>
+        <ul class="chips"><li>YouTube</li><li>DIY Giáng sinh</li><li>24Tr+ lượt xem</li></ul>
       </a>
       <a class="card" href="https://www.youtube.com/@jdfamilia" rel="me">
         <div class="card-top">
@@ -142,6 +167,7 @@
         </div>
         <h3>A Day of JD</h3>
         <p>Hoạt hình không lời về chú hổ con ở Đài Loan, phong cách tranh Monet, tiêu đề năm ngôn ngữ.</p>
+        <ul class="chips"><li>Hoạt hình</li><li>5 ngôn ngữ</li></ul>
       </a>
       <a class="card" href="https://www.youtube.com/@MapADay" rel="me">
         <div class="card-top">
@@ -150,6 +176,7 @@
         </div>
         <h3>Map a Day</h3>
         <p>Địa lý bất ngờ trong chưa đầy một phút, trên ảnh vệ tinh NASA Blue Marble.</p>
+        <ul class="chips"><li>Shorts</li><li>Địa lý</li></ul>
       </a>
       <div class="card card-soon">
         <div class="card-top">

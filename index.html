@@ -8,6 +8,7 @@
 <title>Do Huy Toan — Founder &amp; CEO, E-commerce and Digital Media</title>
 <meta name="description" content="Do Huy Toan is an American entrepreneur in Delaware, founder and CEO of an e-commerce and digital media company, and creator of the YouTube channels Do Huy Toan, JD and Map a Day.">
 <meta name="theme-color" content="#f5efe6">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://dhtoan.github.io/">
 <link rel="alternate" hreflang="en" href="https://dhtoan.github.io/">
 <link rel="alternate" hreflang="vi" href="https://dhtoan.github.io/vi/">
@@ -16,7 +17,9 @@
 <meta property="og:title" content="Do Huy Toan — Founder &amp; CEO">
 <meta property="og:description" content="American entrepreneur in Delaware: e-commerce, digital media and three YouTube channels.">
 <meta property="og:url" content="https://dhtoan.github.io/">
-<meta property="og:image" content="https://dhtoan.github.io/assets/portrait.jpg">
+<meta property="og:image" content="https://dhtoan.github.io/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="vi_VN">
 <meta name="twitter:card" content="summary_large_image">
@@ -27,7 +30,6 @@
 <link rel="stylesheet" href="assets/site.css">
 <script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script src="assets/home.js" defer></script>
-<script type="module" src="assets/scene.js"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -36,14 +38,14 @@
   "url": "https://dhtoan.github.io/",
   "name": "Do Huy Toan — Founder & CEO, E-commerce and Digital Media",
   "inLanguage": "en",
-  "dateModified": "2026-10-20",
+  "dateModified": "2026-11-01",
   "mainEntity": {
     "@type": "Person",
     "@id": "https://dhtoan.github.io/#person",
     "name": "Do Huy Toan",
     "alternateName": ["Đỗ Huy Toàn", "dhtoan"],
     "url": "https://dhtoan.github.io/",
-    "image": "https://dhtoan.github.io/assets/portrait.jpg",
+    "image": "https://dhtoan.github.io/assets/og.jpg",
     "jobTitle": "Founder & CEO",
     "description": "American entrepreneur based in Delaware, founder and CEO of an e-commerce and digital media company, and creator of the YouTube channels Do Huy Toan, JD and Map a Day.",
     "nationality": {"@type": "Country", "name": "United States"},
@@ -52,7 +54,7 @@
       "address": {"@type": "PostalAddress", "addressRegion": "DE", "addressCountry": "US"}
     },
     "knowsLanguage": ["en", "vi"],
-    "knowsAbout": ["E-commerce", "Digital media", "YouTube", "Animation", "HTML5 games", "Christmas decorations", "Geography"],
+    "knowsAbout": ["E-commerce", "Digital media", "YouTube", "Animation", "HTML5 games", "Software development", "Input methods", "Christmas decorations", "Geography"],
     "sameAs": [
       "https://www.youtube.com/@dhtoan",
       "https://www.youtube.com/channel/UCqEffx3Lmpm7CaYM_PDFOgQ",
@@ -65,7 +67,8 @@
     "owns": [
       {"@type": "CreativeWorkSeries", "name": "Do Huy Toan (YouTube channel)", "url": "https://www.youtube.com/@dhtoan", "genre": ["DIY", "Christmas", "History"]},
       {"@type": "CreativeWorkSeries", "name": "A Day of JD", "url": "https://www.youtube.com/@jdfamilia", "genre": ["Animation", "ASMR", "Travel"], "inLanguage": ["en", "ja", "ko", "zh-TW", "es"]},
-      {"@type": "CreativeWorkSeries", "name": "Map a Day", "url": "https://www.youtube.com/@MapADay", "genre": ["Geography", "Education"]}
+      {"@type": "CreativeWorkSeries", "name": "Map a Day", "url": "https://www.youtube.com/@MapADay", "genre": ["Geography", "Education"]},
+      {"@type": "SoftwareApplication", "name": "Dokey", "url": "https://github.com/dhtoan/Dokey", "description": "Free Vietnamese input method (Telex, VNI) for macOS and Windows, written from scratch in C++17 and Swift.", "applicationCategory": "UtilitiesApplication", "operatingSystem": ["macOS 10.13+", "Windows 10", "Windows 11"], "inLanguage": "vi", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}
     ]
   }
 }
@@ -75,7 +78,13 @@
 <a class="skip" href="#main">Skip to content</a>
 <div class="loader" id="loader" aria-hidden="true"><span id="loader-pct">0%</span></div>
 <script>
-(function(){var h=document.documentElement,el=document.getElementById('loader-pct'),p=0,t=setInterval(function(){
+(function(){var h=document.documentElement,el=document.getElementById('loader-pct'),p=0,gl=null;
+  try{var c=document.createElement('canvas');gl=c.getContext('webgl2')||c.getContext('webgl');}catch(e){}
+  if(!gl){h.classList.add('no-webgl','scene-ready');document.getElementById('loader').classList.add('done');return;}
+  var x=gl.getExtension('WEBGL_lose_context');if(x)x.loseContext();
+  // after the page is parsed (scene.js looks up the canvases), like the deferred module tag it replaces
+  document.addEventListener('DOMContentLoaded',function(){var s=document.createElement('script');s.type='module';s.src='assets/scene.js';document.head.appendChild(s);});
+  var t=setInterval(function(){
   if(h.classList.contains('scene-ready')){clearInterval(t);return;}
   p=Math.min(90,p+Math.max(1,(90-p)*.08));el.textContent=Math.round(p)+'%';},60);
   setTimeout(function(){if(!h.classList.contains('scene-ready')){h.classList.add('no-webgl','scene-ready');document.getElementById('loader').classList.add('done');}},7000);})();
@@ -99,6 +108,7 @@
   <div class="stage" id="stage">
     <div class="lab" aria-hidden="true">
       <canvas id="lab-canvas"></canvas>
+      <div class="lab-fallback"><span class="lf-floor"></span><span class="lf-beam"></span><span class="lf-ring"></span><span class="lf-ring lf-ring-2"></span></div>
     </div>
 
     <div class="hud" id="hud" role="region" aria-label="About">
@@ -124,7 +134,7 @@
             <li data-type>E-commerce &amp; direct-to-consumer brands</li>
             <li data-type>YouTube · 33K+ subscribers, 24M+ views</li>
             <li data-type>AI-assisted animation &amp; video</li>
-            <li data-type>HTML5 games &amp; web apps</li>
+            <li data-type>Desktop &amp; web apps · C++, Swift, JS</li>
             <li data-type>Content in 5 languages</li>
           </ul>
         </div>
@@ -143,6 +153,7 @@
           <span class="tag tag-hero" data-scramble>Founder &amp; CEO</span>
         </div>
       </div>
+      <div class="hero-art" aria-hidden="true"><img src="assets/img/dokey.jpg" width="800" height="450" loading="lazy" alt=""><img src="assets/img/jd.jpg" width="800" height="450" loading="lazy" alt=""><img src="assets/img/dhtoan.jpg" width="800" height="450" loading="lazy" alt=""></div>
       <div class="scroll-icon" aria-hidden="true"><span></span></div>
     </div>
     <canvas id="actor-canvas" class="actor" aria-hidden="true"></canvas>
@@ -157,7 +168,21 @@
       <span class="tag tag-sm">Selected</span>
       <h2 id="projects-title">Projects</h2>
     </div>
+    <ul class="stats" aria-label="In numbers"><li class="stat reveal"><b data-count="33">33</b><i>K+</i><span>YouTube subscribers</span></li><li class="stat reveal"><b data-count="24">24</b><i>M+</i><span>video views</span></li><li class="stat reveal"><b data-count="3">3</b><i></i><span>channels, 5 languages</span></li><li class="stat reveal"><b data-count="20,635">20,635</b><i></i><span>tests behind Dokey</span></li></ul>
     <div class="cards">
+      <a class="card card-feature" href="https://github.com/dhtoan/Dokey">
+        <div class="card-top">
+          <div class="card-img"><img src="assets/img/dokey.jpg" width="800" height="450" loading="lazy" alt="The Dokey control panel on macOS"></div>
+          <span class="card-edge" aria-hidden="true"><span class="round round-accent"><svg viewBox="0 0 24 24"><path d="M4 12h15 M13 6l6 6-6 6"/></svg></span></span>
+        </div>
+        <div class="card-body">
+          <span class="tag tag-sm tag-new">Free · Mac &amp; Windows</span>
+          <h3>Dokey</h3>
+          <p>A Vietnamese input method rewritten from scratch in C++17 and Swift. Every keystroke rebuilds the word and checks it against 3,759 syllables, so letters never jump or vanish, even in Chrome, Claude and Electron apps.</p>
+          <p class="typer done" aria-hidden="true"><span class="typer-keys">dduowngf</span><span class="typer-arrow">→</span><span class="typer-out">đường</span></p>
+          <ul class="chips"><li>macOS</li><li>Windows 10 / 11</li><li>Telex · VNI</li><li>Open on GitHub</li></ul>
+        </div>
+      </a>
       <a class="card" href="https://www.youtube.com/@dhtoan" rel="me">
         <div class="card-top">
           <div class="card-img"><img src="assets/img/dhtoan.jpg" width="800" height="450" loading="lazy" alt="Glowing lace Christmas decoration from the Do Huy Toan channel"></div>
@@ -165,6 +190,7 @@
         </div>
         <h3>Do Huy Toan</h3>
         <p>Glowing Christmas DIY ideas and one-minute stories of vintage American holidays. 33K+ subscribers.</p>
+        <ul class="chips"><li>YouTube</li><li>Christmas DIY</li><li>24M+ views</li></ul>
       </a>
       <a class="card" href="https://www.youtube.com/@jdfamilia" rel="me">
         <div class="card-top">
@@ -173,6 +199,7 @@
         </div>
         <h3>A Day of JD</h3>
         <p>A wordless tiger-cub animation set in Taiwan, Monet-inspired, titled in five languages.</p>
+        <ul class="chips"><li>Animation</li><li>5 languages</li></ul>
       </a>
       <a class="card" href="https://www.youtube.com/@MapADay" rel="me">
         <div class="card-top">
@@ -181,6 +208,7 @@
         </div>
         <h3>Map a Day</h3>
         <p>Surprising geography in under a minute, on NASA Blue Marble satellite imagery.</p>
+        <ul class="chips"><li>Shorts</li><li>Geography</li></ul>
       </a>
       <div class="card card-soon">
         <div class="card-top">

@@ -198,3 +198,59 @@
     if (document.visibilityState === 'visible') { ctx.resume(); nextT = ctx.currentTime + .05; } else ctx.suspend();
   });
 })();
+
+// Numbers band: tiles fade in and count up the first time they scroll into view.
+(function () {
+  var stats = [].slice.call(document.querySelectorAll('.stat'));
+  if (!stats.length) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function count(el) {
+    var b = el.querySelector('[data-count]');
+    if (!b || reduce) return;
+    var full = b.dataset.count, sep = (full.match(/[.,]/) || [''])[0], target = parseInt(full.replace(/\D/g, ''), 10);
+    var fmt = function (n) { return sep ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, sep) : String(n); };
+    var start = performance.now(), dur = 1400;
+    (function step(now) {
+      var k = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - k, 3);
+      b.textContent = k < 1 ? fmt(Math.round(target * e)) : full;
+      if (k < 1) requestAnimationFrame(step);
+    })(start);
+  }
+  if (!('IntersectionObserver' in window)) { stats.forEach(function (s) { s.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      var i = stats.indexOf(e.target);
+      setTimeout(function () { e.target.classList.add('in'); count(e.target); }, i * 110);
+      io.unobserve(e.target);
+    });
+  }, { threshold: .3 });
+  stats.forEach(function (s) { io.observe(s); });
+})();
+
+// Dokey card: types Telex keys one by one, then shows the Vietnamese word Dokey turns them into.
+(function () {
+  var box = document.querySelector('.typer');
+  if (!box || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+  var keys = box.querySelector('.typer-keys'), out = box.querySelector('.typer-out');
+  var words = [['dduowngf', 'đường'], ['tieengs Vieetj', 'tiếng Việt'], ['nguoiwf', 'người'], ['quyeets', 'quyết'], ['DDawks Lawks', 'Đắk Lắk'], ['windows', 'windows']];
+  var w = 0, visible = false, timer = 0;
+  function play() {
+    var pair = words[w % words.length], i = 0;
+    box.classList.remove('done');
+    out.textContent = '';
+    (function type() {
+      keys.textContent = pair[0].slice(0, ++i);
+      if (i < pair[0].length) { timer = setTimeout(type, 75 + Math.random() * 60); return; }
+      timer = setTimeout(function () {
+        out.textContent = pair[1]; box.classList.add('done'); w++;
+        timer = setTimeout(function () { if (visible) play(); else timer = 0; }, 2200);
+      }, 260);
+    })();
+  }
+  if (!('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    visible = entries[0].isIntersecting;
+    if (visible && !timer) play();
+  }).observe(box);
+})();
