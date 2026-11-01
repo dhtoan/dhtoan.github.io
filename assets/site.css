@@ -446,26 +446,12 @@ main { position: relative; }
 .typer.done .typer-out { opacity: 1; transform: none; }
 @keyframes caret { 50% { opacity: 0; } }
 
-/* ---------- no-WebGL art: a CSS hologram pedestal in the lab, a collage of shots in the hero ---------- */
-.lab-fallback, .hero-art { display: none; }
-.no-webgl .lab-fallback { display: block; position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.lf-floor {
-  position: absolute; left: -50%; right: -50%; bottom: -10%; height: 60%;
-  background-image: linear-gradient(rgba(95, 220, 255, .22) 1px, transparent 1px), linear-gradient(90deg, rgba(95, 220, 255, .22) 1px, transparent 1px);
-  background-size: 64px 64px; transform: perspective(600px) rotateX(62deg); transform-origin: 50% 100%;
-  -webkit-mask-image: radial-gradient(ellipse 50% 70% at 50% 0%, #000 20%, transparent 75%); mask-image: radial-gradient(ellipse 50% 70% at 50% 0%, #000 20%, transparent 75%);
-}
-.lf-beam { position: absolute; left: 50%; bottom: 30%; width: 220px; height: 70%; margin-left: -110px; background: linear-gradient(to top, rgba(95, 220, 255, .35), rgba(95, 220, 255, 0)); filter: blur(12px); }
-.lf-ring { position: absolute; left: 50%; bottom: 26%; width: 320px; height: 80px; margin-left: -160px; border-radius: 50%; border: 2px solid rgba(95, 220, 255, .85); box-shadow: 0 0 24px rgba(95, 220, 255, .6), inset 0 0 24px rgba(95, 220, 255, .4); animation: ring 3.2s ease-in-out infinite; }
-.lf-ring-2 { width: 220px; height: 54px; margin-left: -110px; bottom: calc(26% + 13px); animation-delay: -1.6s; opacity: .6; }
-@keyframes ring { 50% { transform: scale(1.06); opacity: .55; } }
-.no-webgl .hero-art { display: block; position: absolute; pointer-events: none; aspect-ratio: 16 / 11; width: min(78vw, 420px); left: 50%; bottom: 9vh; transform: translateX(-50%); }
-@media (orientation: landscape) and (min-width: 720px) {
-  .no-webgl .hero-art { width: min(42vw, 640px); left: auto; right: 7%; bottom: auto; top: 50%; transform: translateY(-46%); }
-}
-.hero-art img { position: absolute; width: 74%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 18px; border: 6px solid #fff; box-shadow: 0 24px 50px rgba(60, 40, 15, .22); animation: float 7s ease-in-out infinite; }
-.hero-art img:nth-child(1) { right: 0; top: 0; transform: rotate(4deg); z-index: 3; }
-.hero-art img:nth-child(2) { left: 0; top: 22%; transform: rotate(-6deg); z-index: 2; animation-delay: -2.3s; }
-.hero-art img:nth-child(3) { right: 8%; bottom: 0; transform: rotate(-1deg); z-index: 1; animation-delay: -4.6s; }
-@keyframes float { 50% { translate: 0 -10px; } }
-@media (prefers-reduced-motion: reduce) { .typer-keys::after, .lf-ring, .hero-art img { animation: none; } }
+/* ---------- no WebGL: the same 3D scenes, pre-rendered to stills (assets/still, made with tools/capture-stills.mjs) ---------- */
+.still, .lab-still { display: none; }
+.no-webgl .still, .no-webgl .lab-still { display: block; position: absolute; inset: 0; pointer-events: none; }
+.still img { width: 100%; height: 100%; object-fit: cover; }
+/* hologram: a scan line climbs from his feet to his head (--m, 0..1, set by home.js) and swaps the solid still for the hologram one */
+.lab-still { --feet: 80%; --top: 22%; --y: calc(var(--feet) - (var(--feet) - var(--top)) * var(--m, 0)); }
+@media (orientation: portrait) { .lab-still { --feet: 54%; --top: 15%; } }
+.still-holo { clip-path: inset(var(--y) 0 calc((100% - var(--feet)) * (1 - var(--m, 0))) 0); }
+.still-scan { position: absolute; left: 50%; top: var(--y); width: min(36vw, 340px); height: 3px; margin-left: min(-18vw, -170px); border-radius: 50%; background: #5fdcff; box-shadow: 0 0 18px 4px rgba(95, 220, 255, .7); opacity: calc(var(--m, 0) * (1 - var(--m, 0)) * 8); }

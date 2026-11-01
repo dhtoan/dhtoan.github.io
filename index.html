@@ -80,7 +80,8 @@
 <script>
 (function(){var h=document.documentElement,el=document.getElementById('loader-pct'),p=0,gl=null;
   try{var c=document.createElement('canvas');gl=c.getContext('webgl2')||c.getContext('webgl');}catch(e){}
-  if(!gl){h.classList.add('no-webgl','scene-ready');document.getElementById('loader').classList.add('done');return;}
+  if(!gl){h.classList.add('no-webgl','scene-ready');document.getElementById('loader').classList.add('done');
+    ['land','port'].forEach(function(k){var l=document.createElement('link');l.rel='preload';l.as='image';l.href='assets/still/office-'+k+'.webp';l.media=k=='port'?'(orientation: portrait)':'(orientation: landscape)';document.head.appendChild(l);});return;}
   var x=gl.getExtension('WEBGL_lose_context');if(x)x.loseContext();
   // after the page is parsed (scene.js looks up the canvases), like the deferred module tag it replaces
   document.addEventListener('DOMContentLoaded',function(){var s=document.createElement('script');s.type='module';s.src='assets/scene.js';document.head.appendChild(s);});
@@ -108,7 +109,7 @@
   <div class="stage" id="stage">
     <div class="lab" aria-hidden="true">
       <canvas id="lab-canvas"></canvas>
-      <div class="lab-fallback"><span class="lf-floor"></span><span class="lf-beam"></span><span class="lf-ring"></span><span class="lf-ring lf-ring-2"></span></div>
+      <div class="lab-still"><picture class="still still-lab"><source media="(orientation: portrait)" srcset="assets/still/lab-port.webp"><img src="assets/still/lab-land.webp" alt="" loading="lazy" decoding="async"></picture><picture class="still still-holo"><source media="(orientation: portrait)" srcset="assets/still/holo-port.webp"><img src="assets/still/holo-land.webp" alt="" loading="lazy" decoding="async"></picture><span class="still-scan"></span></div>
     </div>
 
     <div class="hud" id="hud" role="region" aria-label="About">
@@ -147,13 +148,13 @@
 
     <div class="window" id="window">
       <canvas id="office-canvas" aria-hidden="true"></canvas>
+      <picture class="still still-office"><source media="(orientation: portrait)" srcset="assets/still/office-port.webp"><img src="assets/still/office-land.webp" alt="" loading="lazy" decoding="async"></picture>
       <div class="hero">
         <div class="hero-copy">
           <h1>Do Huy<br>Toan</h1>
           <span class="tag tag-hero" data-scramble>Founder &amp; CEO</span>
         </div>
       </div>
-      <div class="hero-art" aria-hidden="true"><img src="assets/img/dokey.jpg" width="800" height="450" loading="lazy" alt=""><img src="assets/img/jd.jpg" width="800" height="450" loading="lazy" alt=""><img src="assets/img/dhtoan.jpg" width="800" height="450" loading="lazy" alt=""></div>
       <div class="scroll-icon" aria-hidden="true"><span></span></div>
     </div>
     <canvas id="actor-canvas" class="actor" aria-hidden="true"></canvas>
@@ -235,7 +236,7 @@
   </section>
 
   <section class="contact" id="contact" aria-labelledby="contact-title">
-    <div class="contact-scene" aria-hidden="true"><canvas id="contact-canvas"></canvas></div>
+    <div class="contact-scene" aria-hidden="true"><canvas id="contact-canvas"></canvas><picture class="still still-contact"><source media="(orientation: portrait)" srcset="assets/still/contact-port.webp"><img src="assets/still/contact-land.webp" alt="" loading="lazy" decoding="async"></picture></div>
     <h2 id="contact-title">Let's work<br>together!</h2>
     <ul class="social" aria-label="Channels and profiles">
       <li><a class="round round-big" href="https://www.youtube.com/@dhtoan" rel="me" aria-label="Do Huy Toan on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"/><path class="solid" d="M10.5 9.5v5l4-2.5z"/></svg></a></li>

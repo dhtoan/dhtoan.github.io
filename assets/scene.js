@@ -9,6 +9,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { makeChibi, POSES, mixPose, applyPose, closeEyes } from './chibi.js';
 
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const html = document.documentElement;
@@ -82,95 +83,6 @@ function blob(size, alpha) { // soft contact shadow
   const m = new THREE.Mesh(new THREE.PlaneGeometry(size, size), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, toneMapped: false }));
   m.rotation.x = -Math.PI / 2; return m;
 }
-
-// ---------- chibi founder: big head, black curtain-bang hair, black tee, rolled-up dark jeans ----------
-const SKIN = '#f7d2b2', HAIR = '#2b211b';
-function makeChibi() {
-  const g = new THREE.Group(), P = {};
-  const skin = mat(SKIN, { roughness: .58 }), shirt = mat('#2b2d34', { roughness: .88 }), pants = mat('#20232b', { roughness: .85 });
-  const hair = mat(HAIR, { roughness: .62 }), dark = mat('#17110e', { roughness: .15 });
-  const pelvis = new THREE.Group(); pelvis.position.y = 1; g.add(pelvis); P.pelvis = pelvis;
-  const hips = mesh(new THREE.SphereGeometry(.31, 24, 16), pants); hips.scale.set(1.06, .6, .8); pelvis.add(hips);
-  const spine = new THREE.Group(); pelvis.add(spine); P.spine = spine;
-  const torso = at(caps(.31, .3, shirt), 0, .36, 0); torso.scale.set(1.1, 1, .8); spine.add(torso); P.torso = torso;
-  spine.add(at(cyl(.14, .19, .12, shirt), 0, .72, 0));
-  spine.add(at(cyl(.1, .11, .2, skin, 16), 0, .82, 0));
-  const head = new THREE.Group(); head.position.y = 1.33; spine.add(head); P.head = head;
-  const skull = mesh(new THREE.SphereGeometry(.56, 40, 30), skin); skull.scale.set(1.04, .97, .98); head.add(skull);
-  const jaw = mesh(new THREE.SphereGeometry(.45, 32, 24), skin); jaw.scale.set(1.04, .78, .94); jaw.position.set(0, -.17, .08); head.add(jaw);
-  [-1, 1].forEach(s => { const e = mesh(new THREE.SphereGeometry(.12, 16, 12), skin); e.scale.set(.55, 1, .8); e.position.set(.57 * s, -.05, -.02); head.add(e); });
-  P.eyes = []; P.lids = [];
-  [-1, 1].forEach(s => {
-    const eye = at(mesh(new THREE.SphereGeometry(.085, 20, 16), dark, false), .2 * s, -.04, .5); eye.scale.set(.88, 1.22, .5); head.add(eye);
-    const hl = at(new THREE.Mesh(new THREE.SphereGeometry(.024, 10, 8), new THREE.MeshBasicMaterial({ color: '#ffffff' })), .2 * s + .028, 0, .54); head.add(hl);
-    const brow = at(caps(.024, .1, hair), .21 * s, .13, .52); brow.rotation.z = Math.PI / 2 + .12 * s; head.add(brow);
-    const cheek = at(new THREE.Mesh(new THREE.SphereGeometry(.07, 16, 12), new THREE.MeshBasicMaterial({ color: '#ff9f8c', transparent: true, opacity: .35, depthWrite: false })), .33 * s, -.17, .44); cheek.scale.set(1, .6, .3); head.add(cheek);
-    P.eyes.push(eye, hl);
-    const lid = at(mesh(new THREE.TorusGeometry(.055, .014, 6, 16, Math.PI), dark, false), .2 * s, -.03, .53); lid.rotation.z = Math.PI; lid.visible = false; head.add(lid); P.lids.push(lid);
-  });
-  head.add(at(ball(.045, '#efbb96', 12), 0, -.1, .55));
-  const mouth = at(mesh(new THREE.TorusGeometry(.05, .013, 6, 16, Math.PI), '#7c3b2d', false), 0, -.23, .5); mouth.rotation.z = Math.PI; head.add(mouth);
-  // hair: cap, back, curtain bangs parted in the middle, sideburns
-  const cap = at(mesh(new THREE.SphereGeometry(.6, 40, 24, 0, Math.PI * 2, 0, Math.PI * .5), hair), 0, .06, -.04); cap.rotation.x = -.28; head.add(cap);
-  const back = mesh(new THREE.SphereGeometry(.59, 32, 20, Math.PI, Math.PI, Math.PI * .25, Math.PI * .5), hair); back.scale.set(1.04, 1, 1.03); head.add(back);
-  [-1, 1].forEach(s => {
-    const bang = at(mesh(new THREE.SphereGeometry(.3, 24, 16), hair), .2 * s, .3, .36); bang.scale.set(1.05, .42, .55); bang.rotation.set(-.35, 0, -.5 * s); head.add(bang);
-    const tip = at(mesh(new THREE.SphereGeometry(.16, 16, 12), hair), .43 * s, .1, .3); tip.scale.set(.55, .9, .55); tip.rotation.z = -.3 * s; head.add(tip);
-    const burn = at(mesh(new THREE.SphereGeometry(.14, 16, 12), hair), .5 * s, -.02, .14); burn.scale.set(.5, 1.1, .7); head.add(burn);
-  });
-  function arm(s) {
-    const sh = new THREE.Group(); sh.position.set(.4 * s, .62, 0); spine.add(sh);
-    // upper arm and forearm share one radius and their round ends are centred on the elbow pivot,
-    // so the arm stays one smooth tube however far the elbow bends
-    const AR = .088, UP = .33, LOW = .27;
-    sh.add(at(caps(AR, UP, skin), 0, -UP / 2, 0));
-    sh.add(ball(.15, shirt, 20));
-    const sleeve = at(mesh(new THREE.CylinderGeometry(.135, .125, .2, 20), shirt), 0, -.1, 0); sh.add(sleeve);
-    const el = new THREE.Group(); el.position.y = -UP; sh.add(el);
-    el.add(at(caps(AR, LOW, skin), 0, -LOW / 2, 0));
-    const hand = at(ball(.11, skin, 16), 0, -LOW - .02, 0); hand.scale.set(.9, 1, .8); el.add(hand);
-    return { sh, el, hand };
-  }
-  P.armL = arm(-1); P.armR = arm(1);
-  function leg(s) {
-    const hp = new THREE.Group(); hp.position.set(.16 * s, -.02, 0); pelvis.add(hp);
-    const LR = .145, TH = .42, SH = .3; // same trick as the arms: one radius, round ends on the knee pivot
-    hp.add(at(caps(LR, TH, pants), 0, -TH / 2, 0));
-    const kn = new THREE.Group(); kn.position.y = -TH; hp.add(kn);
-    kn.add(at(caps(LR, SH, pants), 0, -SH / 2, 0));
-    kn.add(at(cyl(.155, .155, .08, '#2f343e'), 0, -.31, 0));
-    kn.add(at(cyl(.1, .1, .07, '#ece9e3', 16), 0, -.37, 0));
-    const shoe = new THREE.Group(); shoe.position.set(0, -.46, .07); kn.add(shoe);
-    shoe.add(rbox(.27, .15, .42, .07, '#f4f3f0'));
-    shoe.add(at(rbox(.29, .06, .45, .03, '#4a4f5c'), 0, -.075, 0));
-    shoe.add(at(rbox(.2, .03, .2, .015, '#9aa3b5'), 0, .07, -.02));
-    return { hp, kn };
-  }
-  P.legL = leg(-1); P.legR = leg(1);
-  g.userData.parts = P;
-  return g;
-}
-// poses: pelvis height, spine/head tilt, hip/knee bends, shoulder swing/spread, elbow bend
-const POSES = {
-  stand: { py: 1, sp: 0, hd: 0, hip: [0, 0], kn: [0, 0], shx: [0, 0], shz: [.13, .13], el: [-.15, -.15] },
-  sit: { py: 1, sp: .06, hd: .08, hip: [-1.57, -1.57], kn: [1.57, 1.57], shx: [-.95, -.95], shz: [.12, .12], el: [-.75, -.75] },
-  fall: { py: 1, sp: -.1, hd: -.2, hip: [-.75, -.2], kn: [1, .5], shx: [-.5, .3], shz: [1.25, 1.1], el: [-.9, -.5] },
-  crouch: { py: .72, sp: .35, hd: -.2, hip: [-1.05, -1.05], kn: [1.75, 1.75], shx: [-.6, -.6], shz: [.5, .5], el: [-.5, -.5] },
-};
-function mixPose(a, b, k) {
-  const o = {};
-  for (const key in a) o[key] = Array.isArray(a[key]) ? a[key].map((v, i) => lerp(v, b[key][i], k)) : lerp(a[key], b[key], k);
-  return o;
-}
-function applyPose(P, p) {
-  P.pelvis.position.y = p.py; P.spine.rotation.x = p.sp; P.head.rotation.x = p.hd;
-  P.legL.hp.rotation.x = p.hip[0]; P.legR.hp.rotation.x = p.hip[1];
-  P.legL.kn.rotation.x = p.kn[0]; P.legR.kn.rotation.x = p.kn[1];
-  P.armL.sh.rotation.x = p.shx[0]; P.armR.sh.rotation.x = p.shx[1];
-  P.armL.sh.rotation.z = -p.shz[0]; P.armR.sh.rotation.z = p.shz[1];
-  P.armL.el.rotation.x = p.el[0]; P.armR.el.rotation.x = p.el[1];
-}
-function closeEyes(P, closed) { P.eyes.forEach(e => { e.visible = !closed; }); P.lids.forEach(l => { l.visible = closed; }); }
 
 // ---------- 1. office ----------
 function buildOffice(canvas) {
@@ -509,7 +421,8 @@ function buildLab(canvas, actorCanvas) {
   const ghost = makeChibi(); ghost.scale.setScalar(SC); hero.add(ghost);
   const ghostMat = new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: .24, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, clippingPlanes: [ghostKeep] });
   const ghostWire = new THREE.MeshBasicMaterial({ color: CYAN, wireframe: true, transparent: true, opacity: .09, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, clippingPlanes: [ghostKeep] });
-  const ghostMeshes = []; ghost.traverse(o => { if (o.isMesh) ghostMeshes.push(o); });
+  // the face and shirt print are flat decals: the hologram skips them, or they would glow as squares
+  const ghostMeshes = []; ghost.traverse(o => { if (!o.isMesh) return; if (o.userData.decal) o.material = new THREE.MeshBasicMaterial({ visible: false }); else ghostMeshes.push(o); });
   // depth pre-pass: the ghost's own surfaces hide each other, so only the outer skin glows
   // and overlapping parts (joints, sleeves) don't show as bright seams
   const ghostDepth = new THREE.MeshBasicMaterial({ colorWrite: false, clippingPlanes: [ghostKeep], polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });

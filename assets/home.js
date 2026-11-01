@@ -89,6 +89,9 @@
       var until = land ? 2 : parseFloat(b.dataset.untilPortrait || 2);
       setOn(b, pIn > .98 && pSec > 0 && pSec >= from && pSec < until);
     });
+    // without WebGL the hologram is two stills: this drives the scan line between them (site.css .lab-still)
+    var m = pIn < 1 ? 0 : clamp((pSec - .15) / .75); m = m * m * (3 - 2 * m);
+    stage.style.setProperty('--m', m.toFixed(3));
     if (bar) bar.style.transform = 'scaleX(' + pAbout.toFixed(4) + ')';
     if (pct) pct.textContent = Math.round(pAbout * 100) + '%';
 

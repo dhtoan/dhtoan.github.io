@@ -27,7 +27,8 @@
 |---|---|
 | 🧱 **3D tự dựng 100%** | Văn phòng, nhân vật chibi, phòng hologram và cảnh ngủ gật ở phần Liên hệ đều dựng bằng three.js trong code. Không tải model, texture hay font 3D nào. |
 | 🎬 **Kể chuyện theo cuộn trang** | Cửa sổ văn phòng nhấc lên, nhân vật nhảy ra đứng trên bục hologram, các bảng HUD tự gõ chữ theo tiến độ cuộn. |
-| 🛟 **Máy không có WebGL vẫn đẹp** | Kiểm tra WebGL ngay khi tải. Máy không hỗ trợ thì **không tải three.js** (tiết kiệm hơn 1 MB) và hiện bản dự phòng: bục hologram bằng CSS + ảnh ghép các dự án. |
+| 🧑‍💻 **Nhân vật chibi** | Mắt anime vẽ bằng canvas (tròng mắt chuyển màu, 2 đốm sáng, mi mắt, chớp mắt), đầu là một khối liền không đường nối, tóc từng lọn có độ bóng và một sợi “ahoge”, áo in logo `dh.`, giày viền cam. Code riêng ở `assets/chibi.js`, dùng chung cho cả 3 cảnh. |
+| 🛟 **Trình duyệt nào cũng thấy nhân vật** | Máy không có WebGL thì **không tải three.js** (tiết kiệm hơn 1 MB) mà hiện chính các cảnh 3D đã chụp sẵn (`assets/still/`, WebP trong suốt, 30–75 KB/ảnh, bản ngang + dọc). Khi cuộn, vệt quét chạy từ chân lên đầu để biến nhân vật thành hologram như bản 3D. |
 | ⌨️ **Thẻ Dokey có demo gõ** | Thẻ nổi bật gõ từng phím Telex (`dduowngf` → **đường**) để khách thấy ngay Dokey làm gì. |
 | 📊 **Dải số liệu** | 33K+ người đăng ký, 24M+ lượt xem, 3 kênh, 20.635 bài kiểm thử Dokey. Số chạy lên khi cuộn tới. |
 | 🎵 **Nhạc soạn bằng code** | Vòng hợp âm Fmaj7–Em7–Dm7–Cmaj7 phát trực tiếp bằng WebAudio, tắt cho tới khi khách bấm bật. |
@@ -55,7 +56,9 @@
 ├── press/index.html    Press kit: số liệu, 3 bản tiểu sử có nút Copy, gợi ý bài viết
 ├── BIO.md              Tiểu sử EN/VI dùng nguyên văn ở mọi nơi
 ├── assets/
-│   ├── scene.js        Toàn bộ cảnh 3D (three.js), chỉ tải khi máy có WebGL
+│   ├── scene.js        Các cảnh 3D (three.js), chỉ tải khi máy có WebGL
+│   ├── chibi.js        Nhân vật chibi + các tư thế, dùng chung cho mọi cảnh
+│   ├── still/          Ảnh chụp sẵn các cảnh 3D cho máy không có WebGL
 │   ├── home.js         Cuộn trang, HUD, nav, số liệu, demo gõ Dokey, nhạc WebAudio
 │   ├── lang.js         Tự chuyển EN/VI
 │   ├── reveal.js       Hiện dần khi cuộn (press kit)
@@ -63,6 +66,8 @@
 │   ├── favicon.svg     Biểu tượng tab
 │   ├── og.jpg          Ảnh khi chia sẻ link (1200×630)
 │   └── img/            Ảnh thẻ dự án (800×450)
+├── tools/
+│   └── capture-stills.mjs  Chụp lại assets/still/ bằng Chrome/Edge headless
 ├── sitemap.xml
 └── robots.txt
 ```
@@ -91,6 +96,14 @@ Mở <http://localhost:8000/?lang=en> (hoặc `/vi/?lang=vi`). Tham số `?lang=
 **Số liệu kênh**: sửa `BIO.md` trước, rồi chép đúng câu sang 3 trang HTML và phần About của các kênh. Nhớ cập nhật cả dải số liệu (`<ul class="stats">`) trong `index.html` và `vi/index.html`.
 
 **Thêm dự án**: chép một khối `<a class="card">` trong phần `#projects`, ảnh 800×450 đặt ở `assets/img/`. Dự án cần làm nổi bật thì dùng `card card-feature` (chiếm cả hàng). Thêm dự án vào mảng `owns` trong JSON-LD của `index.html`.
+
+**Sửa nhân vật hoặc cảnh 3D**: sửa `assets/chibi.js` / `assets/scene.js`, rồi chụp lại ảnh cho máy không có WebGL (cần Node 22+ và Chrome hoặc Edge; đường dẫn trình duyệt đặt qua biến `BROWSER` nếu không phải Edge):
+
+```bash
+python3 -m http.server 8000 &
+node tools/capture-stills.mjs "http://localhost:8000/?lang=en" assets/still 1440 900 1 land
+node tools/capture-stills.mjs "http://localhost:8000/?lang=en" assets/still 430 932 2 port
+```
 
 **Sau mỗi lần sửa**: cập nhật `dateModified` trong JSON-LD và `lastmod` trong `sitemap.xml`.
 
