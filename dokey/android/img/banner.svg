@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400" font-family="Roboto, Segoe UI, Helvetica, Arial, sans-serif">
+<defs>
+<linearGradient id="hero" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E6FE8"/><stop offset="1" stop-color="#7B4397"/></linearGradient>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#141E30"/><stop offset="1" stop-color="#243B55"/></linearGradient>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.25"/></filter>
+<filter id="card" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-opacity="0.35"/></filter>
+</defs>
+<rect width="1200" height="400" rx="28" fill="url(#hero)"/>
+<circle cx="1120" cy="40" r="160" fill="#FFFFFF" fill-opacity="0.06"/>
+<circle cx="80" cy="380" r="120" fill="#FFFFFF" fill-opacity="0.05"/>
+<g transform="translate(96,70)">
+<rect width="92" height="92" rx="24" fill="#FFFFFF" fill-opacity="0.18"/>
+<g transform="translate(-8,-8) scale(1)">
+<path fill="#FFFFFF" fill-rule="evenodd" d="M36,32 h14 a22,22 0 0 1 0,44 h-14 z M44,40 v28 h6 a14,14 0 0 0 0,-28 z"/>
+<path fill="#FFFFFF" d="M30,51 h18 v6 h-18 z"/>
+<path fill="#FFD166" d="M70,30 a5,5 0 1 1 0.01,0 z"/>
+</g></g>
+<text x="210" y="138" font-size="64" font-weight="700" fill="#FFFFFF">Dokey</text>
+<text x="96" y="218" font-size="30" fill="#FFFFFF">Bàn phím tiếng Việt cho Android</text>
+<text x="96" y="254" font-size="20" fill="#FFFFFF" fill-opacity="0.8">Gõ dấu ở đâu cũng đúng · nhẹ · chạy hoàn toàn trên máy</text>
+<rect x="96" y="276" width="143" height="38" rx="19" fill="#FFFFFF" fill-opacity="0.16"/>
+<text x="167.5" y="301" text-anchor="middle" font-size="18" fill="#FFFFFF">Telex · VNI</text>
+<rect x="251" y="276" width="220" height="38" rx="19" fill="#FFFFFF" fill-opacity="0.16"/>
+<text x="361.0" y="301" text-anchor="middle" font-size="18" fill="#FFFFFF">22 theme + ảnh nền</text>
+<rect x="483" y="276" width="143" height="38" rx="19" fill="#FFFFFF" fill-opacity="0.16"/>
+<text x="554.5" y="301" text-anchor="middle" font-size="18" fill="#FFFFFF">4 kiểu phím</text>
+<rect x="638" y="276" width="176" height="38" rx="19" fill="#FFFFFF" fill-opacity="0.16"/>
+<text x="726.0" y="301" text-anchor="middle" font-size="18" fill="#FFFFFF">Không cần mạng</text>
+<g transform="translate(680,41) scale(1.25)" filter="url(#card)">
+<rect width="360" height="254" rx="18" fill="url(#bg)"/>
+<rect x="8" y="6" width="112" height="28" rx="14" fill="#B39DFF"/>
+<text x="64" y="25" text-anchor="middle" font-size="13" font-weight="700" fill="#1C1240">VI · Telex</text>
+<path d="M331,17 l7,7 l7,-7" fill="none" stroke-width="1.8" stroke-linecap="round" stroke="#C7D2F0" stroke-opacity="0.702"/>
+<circle cx="294" cy="20" r="6.5" fill="none" stroke-width="1.8" stroke="#C7D2F0" stroke-opacity="0.702"/>
+<circle cx="294" cy="20" r="2.5" fill="none" stroke-width="1.8" stroke="#C7D2F0" stroke-opacity="0.702"/>
+<rect x="241" y="13" width="18" height="14" rx="2" fill="none" stroke-width="1.8" stroke="#C7D2F0" stroke-opacity="0.702"/>
+<rect x="250" y="16" width="7" height="8" rx="1" fill="#C7D2F0" fill-opacity="0.702"/>
+<rect x="6.5" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="21.6" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">q</text>
+<text x="30.7" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">1</text>
+<rect x="41.7" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="56.8" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">w</text>
+<text x="65.9" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">2</text>
+<rect x="76.9" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="92.0" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">e</text>
+<text x="101.1" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">3</text>
+<rect x="112.1" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="127.2" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">r</text>
+<text x="136.3" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">4</text>
+<rect x="147.3" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.302"/>
+<text x="162.4" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">t</text>
+<text x="171.5" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">5</text>
+<rect x="141.3" y="-8.4" width="42.2" height="48.4" rx="10" fill="#2C3E5C" filter="url(#sh)"/>
+<text x="162.4" y="25.8" text-anchor="middle" font-size="28" fill="#F1F4FF">t</text>
+<rect x="182.5" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="197.6" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">y</text>
+<text x="206.7" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">6</text>
+<rect x="217.7" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="232.8" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">u</text>
+<text x="241.9" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">7</text>
+<rect x="252.9" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="268.0" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">i</text>
+<text x="277.1" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">8</text>
+<rect x="288.1" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="303.2" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">o</text>
+<text x="312.3" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">9</text>
+<rect x="323.3" y="44.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="338.4" y="73.0" text-anchor="middle" font-size="20" fill="#F1F4FF">p</text>
+<text x="347.5" y="56.0" text-anchor="end" font-size="9" fill="#C7D2F0" fill-opacity="0.702">0</text>
+<rect x="24.1" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="39.2" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">a</text>
+<rect x="59.3" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="74.4" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">s</text>
+<rect x="94.5" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="109.6" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">d</text>
+<rect x="129.7" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="144.8" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">f</text>
+<rect x="164.9" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="180.0" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">g</text>
+<rect x="200.1" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="215.2" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">h</text>
+<rect x="235.3" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="250.4" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">j</text>
+<rect x="270.5" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="285.6" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">k</text>
+<rect x="305.7" y="96.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="320.8" y="125.0" text-anchor="middle" font-size="20" fill="#F1F4FF">l</text>
+<rect x="6.5" y="148.0" width="47.8" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.094"/>
+<path d="M30.400000000000002,161.0 l8,8 h-4 v6 h-8 v-6 h-4 z" fill="none" stroke-width="1.7" stroke-linejoin="round" stroke="#F1F4FF"/>
+<rect x="59.3" y="148.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="74.4" y="177.0" text-anchor="middle" font-size="20" fill="#F1F4FF">z</text>
+<rect x="94.5" y="148.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="109.6" y="177.0" text-anchor="middle" font-size="20" fill="#F1F4FF">x</text>
+<rect x="129.7" y="148.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="144.8" y="177.0" text-anchor="middle" font-size="20" fill="#F1F4FF">c</text>
+<rect x="164.9" y="148.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="180.0" y="177.0" text-anchor="middle" font-size="20" fill="#F1F4FF">v</text>
+<rect x="200.1" y="148.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="215.2" y="177.0" text-anchor="middle" font-size="20" fill="#F1F4FF">b</text>
+<rect x="235.3" y="148.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="250.4" y="177.0" text-anchor="middle" font-size="20" fill="#F1F4FF">n</text>
+<rect x="270.5" y="148.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="285.6" y="177.0" text-anchor="middle" font-size="20" fill="#F1F4FF">m</text>
+<rect x="305.7" y="148.0" width="47.8" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.094"/>
+<path d="M318.59999999999997,170.0 l6,-7 h16 v14 h-16 z M329.59999999999997,167.0 l6,6 M329.59999999999997,173.0 l6,-6" fill="none" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" stroke="#F1F4FF"/>
+<rect x="6.5" y="200.0" width="47.8" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.094"/>
+<text x="30.4" y="226.9" text-anchor="middle" font-size="14" fill="#F1F4FF">?123</text>
+<rect x="59.3" y="200.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="74.4" y="229.0" text-anchor="middle" font-size="20" fill="#F1F4FF">,</text>
+<rect x="94.5" y="200.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.094"/>
+<text x="109.6" y="227.0" text-anchor="middle" font-size="14" font-weight="700" fill="#B39DFF">VI</text>
+<rect x="129.7" y="200.0" width="135.8" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="197.6" y="226.0" text-anchor="middle" font-size="12" fill="#C7D2F0" fill-opacity="0.702">Tiếng Việt</text>
+<rect x="270.5" y="200.0" width="30.2" height="44" rx="7" fill="#FFFFFF" fill-opacity="0.149"/>
+<text x="285.6" y="229.0" text-anchor="middle" font-size="20" fill="#F1F4FF">.</text>
+<rect x="305.7" y="200.0" width="47.8" height="44" rx="7" fill="#B39DFF"/>
+<path d="M338.59999999999997,214.0 v10 h-18 m5,-5 l-5,5 l5,5" fill="none" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" stroke="#1C1240"/>
+</g>
+</svg>
