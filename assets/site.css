@@ -377,6 +377,11 @@ main { position: relative; }
 .press-intro { color: var(--text-2); font-size: 18px; margin: 48px 0 40px; max-width: 640px; }
 .press-main h2 { font: 900 40px/1.05 var(--font-title); letter-spacing: .02em; margin: 72px 0 24px; position: relative; padding-top: 18px; }
 .press-main h2 .tag { position: absolute; top: 0; left: -8px; transform: translateY(-40%) rotate(-4deg); font-size: 20px; }
+.paper-main h1 { font-size: 32px; line-height: 1.15; display: block; margin-bottom: 16px; }
+@media (min-width: 840px) { .paper-main h1 { font-size: 44px; } }
+.paper-authors { margin-bottom: 24px; }
+.paper-actions { margin-bottom: 32px; flex-wrap: wrap; }
+.pcard h3 a { color: inherit; }
 .kicker { font: 400 22px/1 var(--font-mono); text-transform: uppercase; letter-spacing: .05em; color: var(--navy); margin-bottom: 12px; }
 .pcard { background: var(--beige-600); border-radius: 24px; padding: 24px; margin-bottom: 16px; }
 @media (min-width: 840px) { .pcard { padding: 32px; } }
