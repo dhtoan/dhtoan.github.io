@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver'in window)document.documentElement.classList.add('js');</script>
+<title>Dokey: A Vietnamese Input Method That Rebuilds the Whole Word on Every Keystroke — Do Huy Toan</title>
+<meta name="description" content="Working paper by Do Huy Toan (2026): Dokey, a Vietnamese input method for macOS and Windows that rebuilds the whole word on every keystroke.">
+<meta name="theme-color" content="#f5efe6">
+<link rel="canonical" href="https://dhtoan.github.io/papers/dokey-2026/">
+<meta name="citation_title" content="Dokey: A Vietnamese Input Method That Rebuilds the Whole Word on Every Keystroke">
+<meta name="citation_author" content="Do, Toan Huy">
+<meta name="citation_author_institution" content="Independent researcher">
+<meta name="citation_author_orcid" content="0009-0007-5803-4405">
+<meta name="citation_publication_date" content="2026/11/02">
+<meta name="citation_online_date" content="2026/11/02">
+<meta name="citation_technical_report_institution" content="Zenodo">
+<meta name="citation_publisher" content="Zenodo">
+<meta name="citation_doi" content="10.5281/zenodo.23888629">
+<meta name="citation_language" content="en">
+<meta name="citation_keywords" content="Vietnamese; input method; IME; Telex; VNI; keyboard; text input; macOS; Windows">
+<meta name="citation_abstract_html_url" content="https://dhtoan.github.io/papers/dokey-2026/">
+<meta name="citation_pdf_url" content="https://dhtoan.github.io/papers/dokey-2026/dokey-2026.pdf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dokey: A Vietnamese Input Method">
+<meta property="og:description" content="Rebuilding the whole word on every keystroke. Working paper, 2026.">
+<meta property="og:url" content="https://dhtoan.github.io/papers/dokey-2026/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "@id": "https://dhtoan.github.io/papers/dokey-2026/#article",
+  "headline": "Dokey: A Vietnamese Input Method That Rebuilds the Whole Word on Every Keystroke",
+  "name": "Dokey: A Vietnamese Input Method That Rebuilds the Whole Word on Every Keystroke",
+  "author": {"@id": "https://dhtoan.github.io/#person", "@type": "Person", "name": "Do Huy Toan", "identifier": "https://orcid.org/0009-0007-5803-4405"},
+  "datePublished": "2026-11-02",
+  "inLanguage": "en",
+  "genre": "Working paper",
+  "publisher": {"@type": "Organization", "name": "Zenodo"},
+  "copyrightHolder": {"@id": "https://dhtoan.github.io/#person"},
+  "copyrightYear": 2026,
+  "copyrightNotice": "© 2026 Do Huy Toan. All rights reserved. No part may be reproduced, distributed or adapted in any form without the author's prior written permission. Contact: https://dhtoan.github.io/",
+  "license": "https://dhtoan.github.io/papers/dokey-2026/#rights",
+  "identifier": "https://doi.org/10.5281/zenodo.23888629",
+  "sameAs": ["https://doi.org/10.5281/zenodo.23888629", "https://zenodo.org/records/23888629"],
+  "keywords": ["Vietnamese", "input method", "IME", "Telex", "VNI", "keyboard", "text input", "macOS", "Windows"],
+  "encoding": {"@type": "MediaObject", "encodingFormat": "application/pdf", "contentUrl": "https://dhtoan.github.io/papers/dokey-2026/dokey-2026.pdf"},
+  "url": "https://dhtoan.github.io/papers/dokey-2026/"
+}
+</script>
+</head>
+<body class="press-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="logo" href="../../" aria-label="Do Huy Toan, home">dh<span>.</span></a>
+  <nav class="top-actions" aria-label="Main">
+    <a class="round round-text" href="../" aria-label="All papers">ALL</a>
+  </nav>
+</header>
+
+<main id="main" class="press-main paper-main">
+  <p class="kicker">Working paper · Version 2 · 2 November 2026</p>
+  <h1>Dokey: A Vietnamese Input Method That Rebuilds the Whole Word on Every Keystroke</h1>
+  <p class="paper-authors"><strong>Do Huy Toan</strong> · Independent researcher, Delaware, USA · ORCID <a href="https://orcid.org/0009-0007-5803-4405">0009-0007-5803-4405</a></p>
+
+  <div class="contact-actions paper-actions">
+    <a class="btn" href="dokey-2026.pdf">Download PDF</a>
+    <a class="btn btn-light" href="https://doi.org/10.5281/zenodo.23888629">DOI 10.5281/zenodo.23888629</a>
+  </div>
+
+  <section class="pcard reveal" aria-labelledby="abstract">
+    <p class="kicker" id="abstract">Abstract</p>
+    <p>Vietnamese is typed on standard keyboards through input methods such as Telex and VNI, in which ordinary letter or digit keys add diacritics and tones to the word being typed. Common input methods often produce jumbled or lost letters in browsers and Electron applications, and they add tones to English words. Dokey is a new input method for macOS and Windows, written from scratch, that addresses these problems with three design decisions: (1) the engine keeps only the raw keys of the current word and recomputes the displayed word from them with a pure function on every keystroke; (2) a diacritic or tone key is applied only if the result is still a prefix of a valid Vietnamese syllable, otherwise the keys are shown as typed; and (3) the platform layer applies each correction as a single minimal edit, choosing a delivery strategy per application class. The engine is a dependency-free C++17 library of about 1,300 lines with a C API, used by a Swift/AppKit app on macOS and a Win32 app on Windows. We report the design, the platform layers and an evaluation: all 20,635 automated test cases pass, including a round trip over 3,964 syllables with every tone and a regression corpus of 1,171 English and developer words and 30 Vietnamese sentences; the engine takes a median of 0.7–0.8 µs per key on a 2014 desktop CPU; and 11.9% of keys in the corpus need a correction, with 1.39 deletions per correction on average. We also list what has not been tested, notably real Windows machines and several browsers.</p>
+  </section>
+
+  <section class="pcard reveal" aria-labelledby="details">
+    <p class="kicker" id="details">Details</p>
+    <dl class="facts">
+      <dt>Keywords</dt><dd>Vietnamese; input method; IME; Telex; VNI; keyboard; text input; macOS; Windows</dd>
+      <dt>Software</dt><dd><a href="https://github.com/dhtoan/Dokey">github.com/dhtoan/Dokey</a> (version 0.4.0, proprietary)</dd>
+      <dt>Archived at</dt><dd><a href="https://zenodo.org/records/23888629">Zenodo record 23888629</a></dd>
+      <dt id="rights">Rights</dt><dd>© 2026 Do Huy Toan. All rights reserved. No part may be reproduced, distributed or adapted in any form without the author&#39;s prior written permission. Contact: <a href="https://dhtoan.github.io/">dhtoan.github.io</a></dd>
+      <dt>AI use</dt><dd>The author&#39;s company is a member of Anthropic&#39;s Claude Startups program and received Claude Team access and API credits through it. Claude (Anthropic) assisted with code, debugging and the drafting of this paper. In the author&#39;s own experience it made project work roughly ten times faster: problems that once ended with a long sip of water and a longer stare at the screen now usually end with a working fix. The author reviewed all content and is solely responsible for it; Anthropic did not sponsor, review or endorse this work.</dd>
+    </dl>
+  </section>
+
+  <section class="pcard reveal" aria-labelledby="cite">
+    <p class="kicker" id="cite">Cite as</p>
+    <p>Do, T. H. (2026). <em>Dokey: A Vietnamese Input Method That Rebuilds the Whole Word on Every Keystroke</em> (Version 2) [Working paper]. Zenodo. https://doi.org/10.5281/zenodo.23888629</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <nav class="footer-links" aria-label="Footer"><a href="../../">Home</a><a href="../">Papers</a><a href="../../press/">Press kit</a></nav>
+  <p>© 2026 Do Huy Toan. All rights reserved. No part may be reproduced, distributed or adapted in any form without the author&#39;s prior written permission. Contact: <a href="https://dhtoan.github.io/">dhtoan.github.io</a></p>
+</footer>
+<script src="../../assets/reveal.js" defer></script>
+</body>
+</html>
