@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver'in window)document.documentElement.classList.add('js');</script>
+<title>Dokey: Engineering a Vietnamese Input Method — book by Do Huy Toan</title>
+<meta name="description" content="Technical book by Do Huy Toan (2026): the design, implementation and evaluation of Dokey, a Vietnamese input method for macOS and Windows. 222 pages, PDF and EPUB, DOI 10.5281/zenodo.24015181.">
+<meta name="author" content="Do Huy Toan">
+<meta name="theme-color" content="#f5efe6">
+<link rel="canonical" href="https://dhtoan.github.io/books/dokey/">
+<meta name="citation_title" content="Dokey: Engineering a Vietnamese Input Method">
+<meta name="citation_author" content="Do Huy Toan">
+<meta name="citation_author_institution" content="Independent researcher">
+<meta name="citation_author_orcid" content="0009-0007-5803-4405">
+<meta name="citation_publication_date" content="2026/11/06">
+<meta name="citation_online_date" content="2026/11/06">
+<meta name="citation_publisher" content="Zenodo">
+<meta name="citation_doi" content="10.5281/zenodo.24015181">
+<meta name="citation_language" content="en">
+<meta name="citation_keywords" content="Vietnamese; input method; IME; Telex; VNI; keyboard; Unicode; macOS; Windows; software engineering">
+<meta name="citation_abstract_html_url" content="https://dhtoan.github.io/books/dokey/">
+<meta name="citation_pdf_url" content="https://dhtoan.github.io/books/dokey/dokey-book.pdf">
+<meta property="og:type" content="book">
+<meta property="og:title" content="Dokey: Engineering a Vietnamese Input Method">
+<meta property="og:description" content="A technical reference by Do Huy Toan. 222 pages, 2026.">
+<meta property="og:url" content="https://dhtoan.github.io/books/dokey/">
+<meta property="og:image" content="https://dhtoan.github.io/books/dokey/og.jpg">
+<meta property="book:author" content="https://dhtoan.github.io/#person">
+<meta property="book:release_date" content="2026-11-06">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;700;900&family=VT323&display=swap">
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+.book-hero{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:28px;align-items:start;margin:8px 0 22px}
+.book-hero img{width:100%;height:auto;border-radius:6px;box-shadow:0 10px 30px rgba(20,35,58,.25)}
+.book-toc{columns:2;column-gap:28px;padding-left:1.2em;margin:0}
+.book-toc li{break-inside:avoid;margin:0 0 4px}
+@media (max-width:640px){.book-hero{grid-template-columns:minmax(0,1fr)}.book-hero img{max-width:220px}.book-toc{columns:1}}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Book",
+  "@id": "https://dhtoan.github.io/books/dokey/#book",
+  "name": "Dokey: Engineering a Vietnamese Input Method",
+  "alternativeHeadline": "Orthography, Telex and VNI, a Pure-Rebuild Engine, and Keystroke Delivery on macOS and Windows",
+  "author": {"@id": "https://dhtoan.github.io/#person", "@type": "Person", "name": "Do Huy Toan", "identifier": "https://orcid.org/0009-0007-5803-4405", "url": "https://dhtoan.github.io/"},
+  "datePublished": "2026-11-06",
+  "bookEdition": "First edition",
+  "numberOfPages": 222,
+  "inLanguage": "en",
+  "genre": "Technical reference",
+  "about": ["Vietnamese language", "Input methods", "Software engineering"],
+  "keywords": ["Vietnamese", "input method", "IME", "Telex", "VNI", "keyboard", "Unicode", "macOS", "Windows", "software engineering"],
+  "publisher": {"@type": "Organization", "name": "Zenodo"},
+  "copyrightHolder": {"@id": "https://dhtoan.github.io/#person"},
+  "copyrightYear": 2026,
+  "copyrightNotice": "© 2026 Do Huy Toan. All rights reserved. Only the author, Do Huy Toan, may publish, sell or distribute this book. No other person or organisation may publish, sell, resell, print or reprint it, in whole or in part, in any form.",
+  "license": "https://dhtoan.github.io/books/dokey/#rights",
+  "identifier": [{"@type": "PropertyValue", "propertyID": "DOI", "value": "10.5281/zenodo.24015181"}],
+  "sameAs": ["https://doi.org/10.5281/zenodo.24015181", "https://zenodo.org/records/24015181"],
+  "image": "https://dhtoan.github.io/books/dokey/cover.jpg",
+  "isBasedOn": {"@id": "https://dhtoan.github.io/papers/dokey-2026/#article"},
+  "citation": "https://doi.org/10.5281/zenodo.23888629",
+  "workExample": [
+    {"@type": "Book", "bookFormat": "https://schema.org/EBook", "encodingFormat": "application/pdf", "url": "https://dhtoan.github.io/books/dokey/dokey-book.pdf"},
+    {"@type": "Book", "bookFormat": "https://schema.org/EBook", "encodingFormat": "application/epub+zip", "url": "https://zenodo.org/records/24015181"}
+  ],
+  "url": "https://dhtoan.github.io/books/dokey/"
+}
+</script>
+</head>
+<body class="press-page">
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <a class="logo" href="../../" aria-label="Do Huy Toan, home">dh<span>.</span></a>
+  <nav class="top-actions" aria-label="Main">
+    <a class="round round-text" href="../../papers/" aria-label="All papers and books">ALL</a>
+  </nav>
+</header>
+
+<main id="main" class="press-main paper-main">
+  <p class="kicker">Book · First edition · 6 November 2026</p>
+  <h1>Dokey: Engineering a Vietnamese Input Method</h1>
+  <p class="paper-authors"><strong>Do Huy Toan</strong> · Independent researcher, Delaware, USA · ORCID <a href="https://orcid.org/0009-0007-5803-4405">0009-0007-5803-4405</a> · <a href="https://scholar.google.com/citations?user=dTIOjKkAAAAJ" rel="me">Google Scholar</a></p>
+
+  <div class="book-hero">
+    <img src="cover.jpg" width="600" height="960" alt="Cover of Dokey: Engineering a Vietnamese Input Method, by Do Huy Toan">
+    <div>
+      <p><em>Orthography, Telex and VNI, a pure-rebuild engine, and keystroke delivery on macOS and Windows.</em> A technical reference of 222 pages on how one Vietnamese input method turns keystrokes into correct text, and how it gets that text into every kind of application.</p>
+      <div class="contact-actions paper-actions">
+        <a class="btn" href="dokey-book.pdf">Read the PDF</a>
+        <a class="btn btn-light" href="https://zenodo.org/records/24015181">EPUB on Zenodo</a>
+        <a class="btn btn-light" href="https://doi.org/10.5281/zenodo.24015181">DOI 10.5281/zenodo.24015181</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="pcard reveal" aria-labelledby="about">
+    <p class="kicker" id="about">About the book</p>
+    <p>Typing Vietnamese on a computer still goes wrong in ordinary use: letters are jumbled or lost in browsers and Electron applications, English words pick up tone marks, and the screen drifts away from what the input method believes it typed. This book explains, in full technical detail, how Dokey was designed to avoid those failures.</p>
+    <p>Dokey keeps only the raw keys of the current word and rebuilds the whole word from them on every keystroke with a pure function. A mark is applied only if the result can still be a Vietnamese syllable, so English words stay as typed. Every correction leaves the engine as one minimal edit, and the platform layer delivers it in the way each kind of application needs. Every number in the book was taken from the software's repository or measured for the book, with the method stated.</p>
+  </section>
+
+  <section class="pcard reveal" aria-labelledby="contents">
+    <p class="kicker" id="contents">Contents</p>
+    <ol class="book-toc">
+      <li>Typing Vietnamese on a Standard Keyboard</li>
+      <li>Vietnamese Orthography for Engineers</li>
+      <li>Telex and VNI as Formal Rules</li>
+      <li>The Pure-Rebuild Engine</li>
+      <li>Syllable Validation as a Gate</li>
+      <li>Tone Placement and Output Encoding</li>
+      <li>Editing: Backspace, Reopening, Undo and Shortcuts</li>
+      <li>Minimal Edits and Per-Application Delivery</li>
+      <li>The macOS Platform Layer</li>
+      <li>The Windows Platform Layer</li>
+      <li>The C API</li>
+      <li>Testing Strategy</li>
+      <li>Evaluation and What Is Not Tested</li>
+      <li>Performance</li>
+      <li>Building and Packaging</li>
+      <li>Lessons and Future Work</li>
+    </ol>
+    <p>Appendices: rule tables · Unicode code points for Vietnamese letters · initials and rhymes · the complete inventory of 3,957 syllables · regression data · measurement programs · the Korean prototype. Glossary, references and index.</p>
+  </section>
+
+  <section class="pcard reveal" aria-labelledby="details">
+    <p class="kicker" id="details">Details</p>
+    <dl class="facts">
+      <dt>Format</dt><dd>222 pages, 6 × 9 in; PDF and EPUB 3</dd>
+      <dt>Software</dt><dd><a href="https://github.com/dhtoan/Dokey">github.com/dhtoan/Dokey</a> (version 0.5.4, proprietary)</dd>
+      <dt>Related paper</dt><dd><a href="../../papers/dokey-2026/">Dokey: A Vietnamese Input Method That Rebuilds the Whole Word on Every Keystroke</a> (DOI <a href="https://doi.org/10.5281/zenodo.23888629">10.5281/zenodo.23888629</a>)</dd>
+      <dt>Archived at</dt><dd><a href="https://zenodo.org/records/24015181">Zenodo record 24015181</a></dd>
+      <dt id="rights">Rights</dt><dd>© 2026 Do Huy Toan. All rights reserved. Only the author, Do Huy Toan, may publish, sell or distribute this book. No other person or organisation may publish, sell, resell, print or reprint it, in whole or in part, in any form. Contact: <a href="https://dhtoan.github.io/">dhtoan.github.io</a></dd>
+      <dt>AI use</dt><dd>Claude, an AI assistant made by Anthropic, assisted with drafting and checking the text; the author reviewed all content. The cover art and part-opening illustrations were generated with an AI image model under the author&#39;s art direction; the technical diagrams were drawn for the book. Anthropic did not sponsor, review or endorse this work.</dd>
+    </dl>
+  </section>
+
+  <section class="pcard reveal" aria-labelledby="cite">
+    <p class="kicker" id="cite">Cite as</p>
+    <p>Do Huy Toan (2026). <em>Dokey: Engineering a Vietnamese Input Method</em> (1st ed.). Zenodo. https://doi.org/10.5281/zenodo.24015181</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <nav class="footer-links" aria-label="Footer"><a href="../../">Home</a><a href="../../papers/">Papers and books</a><a href="../../press/">Press kit</a></nav>
+  <p>© 2026 Do Huy Toan. All rights reserved. No part may be reproduced, distributed or adapted in any form without the author&#39;s prior written permission. Contact: <a href="https://dhtoan.github.io/">dhtoan.github.io</a></p>
+</footer>
+<script src="../../assets/reveal.js" defer></script>
+</body>
+</html>
